@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="doppler" translate="label" sortOrder="999999" class="doppler-tab">
+            <label>Doppler</label>
+        </tab>
+        <section id="doppler_config" translate="label" type="text" sortOrder="-5000" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Configuration</label>
+            <tab>doppler</tab>
+            <resource>Combinatoria_Doppler::configuration</resource>
+            <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"  showInStore="1">
+                <label>Doppler API</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="username" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Username</label>
+                    <comment>This is your Doppler email address.</comment>
+                    <validate>validate-email</validate>
+                </field>
+                <field id="key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API key</label>
+                    <validate>validate-alphanum</validate>
+                </field>
+                <field id="test" translate="label comment button_label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Test connection</label>
+                    <button_label>Test</button_label>
+                    <button_url>doppler/test/connection</button_url>
+                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\System\Config\TestButton</frontend_model>
+                </field>
+            </group>
+            <group id="synch" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"  showInStore="1">
+                <label>Synch</label>
+                <field id="customers_list"  translate="label" type="select" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Doppler list for customers</label>
+                    <source_model>Combinatoria\Doppler\Model\Source\Lists</source_model>
+                </field>
+                <field id="subscribers_list"  translate="label" type="select" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Doppler list for subscribers</label>
+                    <source_model>Combinatoria\Doppler\Model\Source\Lists</source_model>
+                </field>
+                <field id="synch_customers" translate="label comment button_label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Synchronize customers</label>
+                    <button_label>Synch</button_label>
+                    <button_url>doppler/synch/customers</button_url>
+                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\System\Config\SynchCustomersButton</frontend_model>
+                </field>
+<!--                <field id="synch_subscribers" translate="label comment button_label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">-->
+<!--                    <label>Synchronize subscribers</label>-->
+<!--                    <button_label>Synch</button_label>-->
+<!--                    <button_url>doppler/synch/subscribers</button_url>-->
+<!--                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\System\Config\SynchSubscribersButton</frontend_model>-->
+<!--                </field>-->
+                <field id="enabled_cron" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled Synchronization Cron</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="frequency" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Synchronization Cron Frequency</label>
+                    <source_model>Combinatoria\Doppler\Model\System\Config\Source\Cron\Frequency</source_model>
+                </field>
+            </group>
+            <group id="scripts" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"  showInStore="1">
+                <label>Scripts</label>
+                <field id="popup" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Popup</label>
+                </field>
+                <field id="tracking" translate="label comment" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tracking</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

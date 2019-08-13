@@ -1,0 +1,17 @@
+Save,Guardar
+"Save Rows","Guardar Mapeo"
+"The list has been successfully created","La lista fue creada con éxito"
+"Rows have been saved successfully","Los datos fueron guardados"
+"Customers has been synchronized.","Clientes sincronizados con éxito"
+"Connection sucefully.","Conexión exitosa"
+"Map fields","Mapeo de campos"
+"Doppler Lists","listas de Doppler"
+Configuration,Configuración
+Username,"Nombre de usuario"
+"Test connection","Probar conexión"
+"Doppler list for customers","Lista de Doppler para clientes"
+"Doppler list for subscribers","Lista de Doppler para suscriptores"
+"Synchronize customers","Sincronizar clientes"
+"Enabled Synchronization Cron","Activar cron de sincronización"
+"Synchronization Cron Frequency","Frecuencia de sincronización automática"
+"Doppler extension is disable.","La extensión de Doppler está desactivada."
