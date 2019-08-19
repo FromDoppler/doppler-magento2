@@ -1,0 +1,15 @@
+.admin__menu #menu-combinatoria-doppler-menu > a:before  {
+    opacity: 0.65;
+    content: '' !important;
+    font-size: 2.4rem;
+    display: block;
+    position: relative;
+    top: -0.3rem;
+    width: 32px;
+    height: 30px;
+    background: url(../images/menu-icon-doppler.png);
+    background-size: 32px 30px;
+    margin: 0 auto;
+}
+
+.admin__menu #menu-combinatoria-doppler-menu:hover > a:before {opacity: 1;}

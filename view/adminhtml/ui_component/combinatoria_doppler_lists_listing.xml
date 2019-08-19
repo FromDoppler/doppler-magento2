@@ -31,13 +31,26 @@
             </argument>
         </argument>
     </dataSource>
+    <massaction name="listing_massaction">
+        <action name="delete">
+            <settings>
+                <confirm>
+                    <message translate="true">Are you sure to delete selected lists?</message>
+                    <title translate="true">Delete</title>
+                </confirm>
+                <url path="doppler/lists/delete"/>
+                <type>delete</type>
+                <label translate="true">Delete</label>
+            </settings>
+        </action>
+    </massaction>
     <columns name="spinner_columns">
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">listid</item>
+                    <item name="indexField" xsi:type="string">listId</item>
                 </item>
             </argument>
         </selectionsColumn>

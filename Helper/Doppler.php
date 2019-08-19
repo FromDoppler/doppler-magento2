@@ -248,12 +248,13 @@ class Doppler extends AbstractHelper{
                 $responseContent = json_decode($resp, true);
                 $listsResponseArray = $responseContent['items'];
 
-                foreach ($listsResponseArray as $list)
-                {
-                    $list['id_field_name'] = 'listId';
-                    $listsArray[] = $list;
+                if(is_array($listsResponseArray)){
+                    foreach ($listsResponseArray as $list)
+                    {
+                        $list['id_field_name'] = 'listId';
+                        $listsArray[] = $list;
+                    }
                 }
-
             }
 
             // Close request to clear up some resources
@@ -737,10 +738,7 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    $errorResponseArray = $responseContent['errors'];
-                    foreach ($errorResponseArray as $error) {
-                        $errors[] = $error['detail'];
-                    }
+                    $errors[] = $responseContent['detail'];
                     throw new \Exception(implode("\n",$errors));
                 }else{
                     return true;
@@ -787,10 +785,7 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    $errorResponseArray = $responseContent['errors'];
-                    foreach ($errorResponseArray as $error) {
-                        $errors[] = $error['detail'];
-                    }
+                    $errors[] = $responseContent['detail'];
                     throw new \Exception(implode("\n",$errors));
                 }else{
                     return true;
@@ -798,6 +793,50 @@ class Doppler extends AbstractHelper{
             }
             // Close request to clear up some resources
             curl_close($ch);
+        }
+    }
+
+    public function deleteList($listId)
+    {
+        $usernameValue = $this->getConfigValue('doppler_config/config/username');
+        $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
+
+        if ($usernameValue != '' && $apiKeyValue != '') {
+            // Get cURL resource
+            $ch = curl_init();
+
+            // Set url
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/lists/' . $listId);
+
+            // Set method
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+            // Set options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            // Set headers
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    "Authorization: token " . $apiKeyValue,
+                    "Content-Type: application/json",
+                ]
+            );
+
+
+            // Send the request & save response to $resp
+            $resp = curl_exec($ch);
+
+            if ($resp) {
+                $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                if ($statusCode == '200') {
+                    return true;
+                } else {
+                    $responseContent = json_decode($resp, true);
+                    throw new \Exception(
+                        __('The following errors occurred deleting your list: ' . $responseContent['title'])
+                    );
+                }
+            }
         }
     }
 }
