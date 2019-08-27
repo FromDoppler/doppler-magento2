@@ -32,7 +32,7 @@ use Magento\Integration\Model\IntegrationFactory;
  * @package Combinatoria\Doppler\Helper
  */
 class Doppler extends AbstractHelper{
-     /**
+    /**
      * @var ObjectManagerInterface $objectManager
      */
     protected $objectManager;
@@ -188,16 +188,19 @@ class Doppler extends AbstractHelper{
             if($resp)
             {
                 $responseContent = json_decode($resp, true);
-                $fieldsResponseArray = $responseContent['items'];
 
-                foreach ($fieldsResponseArray as $field)
-                {
-                    $fieldName = $field['name'];
+                if(isset($responseContent['items'])){
+                    $fieldsResponseArray = $responseContent['items'];
 
-                    // The 'EMAIL' field shouldn't be available since it's read-only in Doppler
-                    if ($fieldName != 'EMAIL')
+                    foreach ($fieldsResponseArray as $field)
                     {
-                        $fieldsArray[$fieldName] = $fieldName;
+                        $fieldName = $field['name'];
+
+                        // The 'EMAIL' field shouldn't be available since it's read-only in Doppler
+                        if ($fieldName != 'EMAIL')
+                        {
+                            $fieldsArray[$fieldName] = $fieldName;
+                        }
                     }
                 }
             }
@@ -246,13 +249,16 @@ class Doppler extends AbstractHelper{
             if($resp)
             {
                 $responseContent = json_decode($resp, true);
-                $listsResponseArray = $responseContent['items'];
 
-                if(is_array($listsResponseArray)){
-                    foreach ($listsResponseArray as $list)
-                    {
-                        $list['id_field_name'] = 'listId';
-                        $listsArray[] = $list;
+                if(isset($responseContent['items'])){
+                    $listsResponseArray = $responseContent['items'];
+
+                    if(is_array($listsResponseArray)){
+                        foreach ($listsResponseArray as $list)
+                        {
+                            $list['id_field_name'] = 'listId';
+                            $listsArray[] = $list;
+                        }
                     }
                 }
             }
@@ -586,15 +592,18 @@ class Doppler extends AbstractHelper{
             if($resp)
             {
                 $responseContent = json_decode($resp, true);
-                $fieldsResponseArray = $responseContent['items'];
 
-                foreach ($fieldsResponseArray as $field)
-                {
-                    $fieldName = $field['name'];
+                if(isset($responseContent['items'])){
+                    $fieldsResponseArray = $responseContent['items'];
 
-                    if ($fieldName == $dopplerFieldName)
+                    foreach ($fieldsResponseArray as $field)
                     {
-                        return $field['type'];
+                        $fieldName = $field['name'];
+
+                        if ($fieldName == $dopplerFieldName)
+                        {
+                            return $field['type'];
+                        }
                     }
                 }
             }
@@ -613,6 +622,7 @@ class Doppler extends AbstractHelper{
      */
     public function getDopplerSubscribers($listId)
     {
+        $fieldsResponseArray = array();
         $this->_fieldsArray = array();
 
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
@@ -643,7 +653,9 @@ class Doppler extends AbstractHelper{
             if($resp)
             {
                 $responseContent = json_decode($resp, true);
-                $fieldsResponseArray = $responseContent['items'];
+                if(isset($responseContent['items'])){
+                    $fieldsResponseArray = $responseContent['items'];
+                }
             }
 
             // Close request to clear up some resources
