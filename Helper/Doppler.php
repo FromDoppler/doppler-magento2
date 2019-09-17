@@ -318,7 +318,8 @@ class Doppler extends AbstractHelper{
 
                 if ($statusCode == '201')
                 {
-                    return true;
+                    $responseContent = json_decode($resp, true);
+                    return $responseContent['createdResourceId'];
                 } else {
                     $responseContent = json_decode($resp, true);
                     throw new \Exception(
@@ -384,11 +385,22 @@ class Doppler extends AbstractHelper{
 
             $list = $this->getDopplerSubscribers($dopplerListId);
 
+            $items = 0;
             foreach ($customersArray as $customer)
             {
-                if($this->isSynchronized($customer['email'],$list)){
-                    continue;
+                if(isset($customer['email'])){
+                    if($this->isSynchronized($customer['email'],$list)){
+                        continue;
+                    }
                 }
+
+                if(isset($customer['subscriber_email'])){
+                    if($this->isSynchronized($customer['subscriber_email'],$list)){
+                        continue;
+                    }
+                }
+
+                $items = 1;
                 // Load Magento customer attributes from mapped fields
                 foreach ($dopplerMappedFields as $field)
                 {
@@ -479,6 +491,9 @@ class Doppler extends AbstractHelper{
 
             }
 
+            if(!$items){
+                return true;
+            }
             $body .= '],}}';
 
             // Get cURL resource
@@ -845,7 +860,7 @@ class Doppler extends AbstractHelper{
                 } else {
                     $responseContent = json_decode($resp, true);
                     throw new \Exception(
-                        __('The following errors occurred deleting your list: ' . $responseContent['title'])
+                        __($responseContent['detail'])
                     );
                 }
             }

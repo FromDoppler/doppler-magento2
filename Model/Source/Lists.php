@@ -33,6 +33,13 @@ class Lists implements \Magento\Framework\Option\ArrayInterface
                 'value' => $list['listId']
             ];
         }
+
+        usort($options, array('Combinatoria\Doppler\Model\Source\Lists','compareByName'));
+
         return $options;
+    }
+
+    private static function compareByName($a, $b) {
+        return strcmp(strtolower($a["label"]), strtolower($b["label"]));
     }
 }

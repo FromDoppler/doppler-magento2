@@ -57,9 +57,17 @@ class Delete extends Action
     {
         try {
             $deleteIds = $this->getRequest()->getParams('selected');
+
+            $customers_list = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
+            $subscribers_list = $this->_dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
+
             /** @var \Magento\Sales\Model\Order $order */
             foreach ($deleteIds['selected'] as $list) {
-                $this->_dopplerHelper->deleteList($list);
+                if($list != $customers_list && $list != $subscribers_list){
+                    $this->_dopplerHelper->deleteList($list);
+                }else{
+                    $this->messageManager->addErrorMessage(__("You cannot delete lists currently used for synchronization"));
+                }
             }
 
             $this->messageManager->addSuccessMessage(__('The lists has been successfully deleted'));

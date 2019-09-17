@@ -72,9 +72,15 @@ class Connection extends Action {
         $result = [];
         try {
 
-            $this->_dopplerHelper->testAPIConnection();
-            $result['status']  = true;
-            $result['content'] = __('Connection sucefully.');
+            $status = $this->_dopplerHelper->testAPIConnection();
+            if($status == 200){
+                $result['status']  = true;
+                $result['content'] = __('Connection sucefully.');
+            }else{
+                throw new \Exception(
+                    __('Error: Verify username and key.')
+                );
+            }
 
         } catch (Exception $exception){
 

@@ -49,6 +49,9 @@
                     <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="addButtonLabel" xsi:type="string">Add Row</item>
                     <item name="deleteProperty" xsi:type="boolean">false</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="doppler-dynamic-rows" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
             <container name="record">

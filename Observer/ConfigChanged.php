@@ -16,6 +16,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\RequestInterface;
 use Combinatoria\Doppler\Helper\Doppler;
 use Magento\Framework\Message\ManagerInterface;
 /**
@@ -35,6 +36,8 @@ class ConfigChanged implements ObserverInterface{
     private $_storeManager;
 
     private $messageManager;
+
+    protected $cacheTypeList;
     /**
      * Constructor
      *
@@ -44,11 +47,13 @@ class ConfigChanged implements ObserverInterface{
     public function __construct(
         Doppler $helper,
         StoreManagerInterface $storeManager,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     ) {
         $this->_helper = $helper;
         $this->_storeManager = $storeManager;
         $this->messageManager = $messageManager;
+        $this->cacheTypeList = $cacheTypeList;
     }
 
 
@@ -71,6 +76,49 @@ class ConfigChanged implements ObserverInterface{
                 try{
                     $message = $this->_helper->putIntegration();
                     $this->_helper->setConfigValue('doppler_config/integration/enabled', 1);
+
+                    /* Activate default lists */
+                    if($this->_helper->getConfigValue('doppler_config/synch/customers_list') == ''){
+                        $lists = $this->_helper->getDopplerLists();
+                        foreach ($lists as $list){
+                            if($list['name'] == 'Clientes de Magento' || $list['name'] == 'Magento Clients'){
+                                $this->_helper->setConfigValue('doppler_config/synch/customers_list', $list['listId']);
+                                break;
+                            }
+                        }
+
+                        try {
+                            $name = 'Magento Clients';
+                            $listId = $this->_helper->createDopplerLists($name);
+                            $this->_helper->setConfigValue('doppler_config/synch/customers_list', $listId);
+                        } catch (\Exception $e) {
+                            $this->messageManager->addErrorMessage(__($e->getMessage()));
+                        }
+                    }
+
+                    if($this->_helper->getConfigValue('doppler_config/synch/subscribers_list') == ''){
+                        if(!isset($lists)){
+                            $lists = $this->_helper->getDopplerLists();
+                        }
+                        foreach ($lists as $list){
+                            if($list['name'] == 'Suscriptores de Magento' || $list['name'] == 'Magento Subscribers'){
+                                $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $list['listId']);
+                                break;
+                            }
+                        }
+
+                        try {
+                            $name = 'Magento Subscribers';
+                            $listId = $this->_helper->createDopplerLists($name);
+                            $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $listId);
+                        } catch (\Exception $e) {
+                            $this->messageManager->addErrorMessage(__($e->getMessage()));
+                        }
+                    }
+
+                    $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+                    $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
+
                 }catch (\Exception $e){
                     $this->messageManager->addErrorMessage(__($e->getMessage()));
                 }
@@ -82,6 +130,9 @@ class ConfigChanged implements ObserverInterface{
                     $this->_helper->setConfigValue('doppler_config/integration/enabled', 0);
                 }catch(\Exception $e){
                     $this->messageManager->addErrorMessage(__($e->getMessage()));
+                    $this->_helper->setConfigValue('doppler_config/config/enabled', 1);
+                    $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+                    $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
                 }
             }
         }

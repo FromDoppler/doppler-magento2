@@ -9,18 +9,24 @@
             <tab>doppler</tab>
             <resource>Combinatoria_Doppler::configuration</resource>
             <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"  showInStore="1">
-                <label>Doppler API</label>
-                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Connect your Magento store with Doppler</label>
+                <field id="author" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[When you synchronize, you can send automatically your Client's information to your Doppler account. You will be able to create Lists, import your products into customizable Email Templates and design Abandoned Cart and Visited Product Automations. Any doubts? Just press <a href='https://help.fromdoppler.com/en/how-to-integrate-your-magento-account-with-doppler/'>HELP</a>.]]></label>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                </field>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
+                    <comment><![CDATA[By enabling this connection, you agree to Doppler's <a href='https://www.fromdoppler.com/legal/terminos-condiciones/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Terms and Conditions</a>.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="username" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="username" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Username</label>
-                    <comment>This is your Doppler email address.</comment>
+                    <comment>This is your Doppler User Email</comment>
                     <validate>validate-email</validate>
                 </field>
-                <field id="key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="key" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>API key</label>
+                    <comment><![CDATA[Where is your API Key? Just press <a href='https://help.fromdoppler.com/en/where-do-i-find-my-api-key/'>HELP</a>]]></comment>
                     <validate>validate-alphanum</validate>
                 </field>
                 <field id="test" translate="label comment button_label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -31,7 +37,11 @@
                 </field>
             </group>
             <group id="synch" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"  showInStore="1">
-                <label>Synch</label>
+                <label>Synchronization</label>
+                <field id="synchtext" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>To connect your Magento store with Doppler, you must select the information you want to link between both platforms.</label>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                </field>
                 <field id="customers_list"  translate="label" type="select" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Doppler list for customers</label>
                     <source_model>Combinatoria\Doppler\Model\Source\Lists</source_model>
@@ -63,6 +73,10 @@
             </group>
             <group id="scripts" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"  showInStore="1">
                 <label>Scripts</label>
+                <field id="scriptstext" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Here you can add the scripts, either to embed a Pop up that you have created in Doppler on your Website or to track the behavior of Users on your Website. The scripts you enter will work whether you have an active integration.</label>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                </field>
                 <field id="popup" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Popup</label>
                 </field>

@@ -55,7 +55,7 @@ class Save extends Action
             $name = $this->getRequest()->getParam('name');
 
             if($this->_dopplerHelper->createDopplerLists($name)){
-                $this->messageManager->addSuccessMessage(__('The list has been successfully created'));
+                $this->messageManager->addSuccessMessage(__('The List has been created correctly.'));
             }
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__($e->getMessage()));

@@ -16,11 +16,24 @@ class MagentoField implements \Magento\Framework\Option\ArrayInterface
         ];
         foreach($attributeInfo as $attributes)
         {
+            if($attributes->getAttributeCode() == 'region_id'){
+                $label = __("State/Province ID");
+            }else{
+                $label = $attributes->getFrontendLabel();
+            }
+
             $options[] = [
-                'label' => $attributes->getFrontendLabel(),
+                'label' => $label,
                 'value' => $attributes->getAttributeCode(),
             ];
         }
+
+        usort($options, array('Combinatoria\Doppler\Model\Source\MagentoField','compareByName'));
+
         return $options;
+    }
+
+    private static function compareByName($a, $b) {
+        return strcmp(strtolower($a["label"]), strtolower($b["label"]));
     }
 }
