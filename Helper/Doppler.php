@@ -765,8 +765,13 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    $errors[] = $responseContent['detail'];
-                    throw new \Exception(implode("\n",$errors));
+                    if($responseContent['errorCode'] == 42){
+                        $errorMsg = __("Ouch! Your Magento store is already connected through the Control Panel of your Doppler Account.");
+                    }else{
+                        $errorMsg = __($responseContent['detail']);
+                    }
+
+                    throw new \Exception($errorMsg);
                 }else{
                     return true;
                 }
@@ -812,8 +817,13 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    $errors[] = $responseContent['detail'];
-                    throw new \Exception(implode("\n",$errors));
+                    if($responseContent['errorCode'] == 40){
+                        $errorMsg = __("Ouch! You can't disconnect the integration 'cause you've Campaigns associated to it.");
+                    }else{
+                        $errorMsg = __($responseContent['detail']);
+                    }
+
+                    throw new \Exception($errorMsg);
                 }else{
                     return true;
                 }
@@ -859,9 +869,46 @@ class Doppler extends AbstractHelper{
                     return true;
                 } else {
                     $responseContent = json_decode($resp, true);
-                    throw new \Exception(
-                        __($responseContent['detail'])
-                    );
+                    $errorMsg = '';
+                    if($responseContent['errorCode'] == 8){
+                        switch ($responseContent['blockingReasonCode']){
+                            case "CannotDeleteSubscribersListWithAnScheduledCampaign":
+                                $errorMsg = __("Ouch! The List is associated to a Campaign in sending process.");
+                                break;
+                            case "CannotDeleteSubscribersListWithAnAssociatedSegment":
+                                $errorMsg = __("Ouch! The List has associated Segments. To delete it, go to Doppler and disassociate them.");
+                                break;
+                            case "CannotDeleteSubscribersListWithAnAssociatedEvent":
+                                $errorMsg = __("Ouch! The List is associated with an active Automation. To delete it, go to Doppler and disassociate them.");
+                                break;
+                            case "CannotDeleteSubscribersListWithAnAssociatedForm":
+                                $errorMsg = __("Ouch! The List is associated with a Form. To delete it, go to Doppler and disassociate them.");
+                                break;
+                            case "CannotDeleteSubscribersListWithAnAssociatedIntegration":
+                                $errorMsg = __("Ouch! The List is associated with an active integration. To delete it, go to Doppler and disconnect the integration.");
+                                break;
+                            case "CannotDeleteSubscribersListInMergingProcess":
+                                $errorMsg = __("Ouch! The List is in the process of union with another one.");
+                                break;
+                            case "CannotDeleteSubscribersListInSegmentGenerationProcess":
+                                $errorMsg = __("Ouch! The List is still in the process of being created.");
+                                break;
+                            case "CannotDeleteSubscribersListInImportSubscribersProcess":
+                                $errorMsg = __("Ouch! The List is in the process of loading.");
+                                break;
+                            case "CannotDeleteSubscribersListInExportSubscribersProcess":
+                                $errorMsg = __("Ouch! the list is in process of being exported.");
+                                break;
+                            default:
+                                $errorMsg = __($responseContent['detail']);
+                        }
+                    }else if($responseContent['errorCode'] == 1){
+                        $errorMsg = __("Ouch! The List is in the process of being deleted.");
+                    }else{
+                        $errorMsg = __($responseContent['detail']);
+                    }
+
+                    throw new \Exception($errorMsg);
                 }
             }
         }
