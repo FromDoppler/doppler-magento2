@@ -14,7 +14,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="combinatoria_doppler_synch" instance="Combinatoria\Doppler\Cron\Synch" method="execute">
+        <job name="doppler_synch" instance="Combinatoria\Doppler\Cron\Synch" method="execute">
             <config_path>crontab/default/jobs/doppler_synch/schedule/cron_expr</config_path>
         </job>
     </group>

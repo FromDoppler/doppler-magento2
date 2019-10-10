@@ -16,7 +16,7 @@
                 </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
-                    <comment><![CDATA[By enabling this connection, you agree to Doppler's <a href='https://www.fromdoppler.com/legal/terminos-condiciones/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Terms and Conditions</a>.]]></comment>
+                    <comment><![CDATA[By enabling this connection, you agree to Doppler's <a href='https://www.fromdoppler.com/en/legal/terms/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Terms and Conditions</a>.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="username" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">

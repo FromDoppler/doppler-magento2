@@ -7,7 +7,7 @@ Save,Guardar
 "Fields mapping","Mapeo de campos"
 "Doppler Lists","Listas de Doppler"
 Configuration,Configuración
-Username,"Nombre de usuario"
+Username,"Nombre de Usuario"
 "Test connection","Probar conexión"
 "Doppler list for customers","Lista de Doppler para clientes"
 "Doppler list for subscribers","Lista de Doppler para suscriptores"
@@ -32,8 +32,8 @@ Username,"Nombre de usuario"
 "Send your Client's information from Magento to Doppler. To do this, select the equivalent Fields in both platforms. Remember, with Subscribers you can only synchronize Emails.","Envía la información de tus Clientes de Magento a Doppler. Para hacerlo, selecciona los Campos equivalentes en ambas plataformas. Ten en cuenta que en el caso de los Suscriptores sólo podrás sincronizar el Campo Email."
 "State/Province ID","Provincia ID"
 "Connect your Magento store with Doppler","Integra tu tienda de Magento con Doppler"
-"When you synchronize, you can send automatically your Client's information to your Doppler account. You will be able to create Lists, import your products into customizable Email Templates and design Abandoned Cart and Visited Product Automations. Any doubts? Just press <a href='https://help.fromdoppler.com/en/how-to-integrate-your-magento-account-with-doppler/'>HELP</a>.","Mediante esta sincronización,podrás enviar automáticamente la información de tus Clientes a tu cuenta de Doppler. Así podrás crear Listas, importar tus productos en Plantillas de Email personalizables y generar Automations de Carrito Abandonado y Producto Visitado. ¿Tienes dudas? Sólo presiona <a href='https://help.fromdoppler.com/en/how-to-integrate-your-magento-account-with-doppler/'>HELP</a>."
-"By enabling this connection, you agree to Doppler's <a href='https://www.fromdoppler.com/legal/terminos-condiciones/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Terms and Conditions</a>.","Habilitando esta integración, estás de acuerdo con los <a href='https://www.fromdoppler.com/legal/terminos-condiciones/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Términos y Condiciones de Doppler</a>."
+"When you synchronize, you can send automatically your Client's information to your Doppler account. You will be able to create Lists, import your products into customizable Email Templates and design Abandoned Cart and Visited Product Automations. Any doubts? Just press <a href='https://help.fromdoppler.com/en/how-to-integrate-your-magento-account-with-doppler/'>HELP</a>.","Mediante esta sincronización, podrás enviar automáticamente la información de tus Clientes a tu cuenta de Doppler. Así podrás crear Listas, importar tus productos en Plantillas de Email personalizables y generar Automations de Carrito Abandonado y Producto Visitado. ¿Tienes dudas? Sólo presiona <a href='https://help.fromdoppler.com/es/como-integrar-tu-ecommerce-de-magento-con-tu-cuenta-de-doppler/'>HELP</a>."
+"By enabling this connection, you agree to Doppler's <a href='https://www.fromdoppler.com/en/legal/terms/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Terms and Conditions</a>.","Habilitando esta integración, estás de acuerdo con los <a href='https://www.fromdoppler.com/legal/terminos-condiciones/?utm_source=integracion&utm_medium=integracion&utm_campaign=magento'>Términos y Condiciones de Doppler</a>."
 "This is your Doppler User Email","Este es tu Email de Usuario de Doppler."
 "Where is your API Key? Just press <a href='https://help.fromdoppler.com/en/where-do-i-find-my-api-key/'>HELP</a>","¿Dónde encontrar tu API Key? Sólo presiona <a href='https://help.fromdoppler.com/en/where-do-i-find-my-api-key/'>HELP</a>"
 "To connect your Magento store with Doppler, you must select the information you want to link between both platforms.","Para conectar tu tienda Magento con Doppler, debes seleccionar la información que quieres vincular entre ambas plataformas."
@@ -50,3 +50,22 @@ Username,"Nombre de usuario"
 "Ouch! The List is in the process of being deleted.","¡Ouch! La Lista está en proceso de eliminación."
 "Ouch! Your Magento store is already connected through the Control Panel of your Doppler Account.","¡Ouch! Tu tienda Magento ya se encuentra conectada desde el Panel de Control de tu cuenta de Doppler."
 "Ouch! You can't disconnect the integration 'cause you've Campaigns associated to it.","¡Ouch! No puedes desconectar la integración por tener Campañas activas asociadas"
+"Synchronization","Sincronización"
+"Select a list","Seleciona una lista"
+"1 minute","1 minuto"
+"5 minutes","5 minutos"
+"10 minutes","10 minutos"
+"30 minutes","30 minutos"
+"1 hour","1 hora"
+"2 hours","2 horas"
+"6 hours","6 horas"
+"12 hours","12 horas"
+"1 day","1 día"
+"2 days","2 días"
+"3 days","3 días"
+Enabled,Habilitar
+Yes,Si
+Name,Nombre
+Status,Estado
+Subscribers,Suscriptores
+Cancel,Cancelar

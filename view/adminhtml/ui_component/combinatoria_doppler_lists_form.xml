@@ -37,7 +37,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="collapsible" xsi:type="boolean">false</item>
-                <item name="label" xsi:type="string" translate="true">Doppler List</item>
+                <item name="label" xsi:type="string" translate="true"></item>
                 <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>

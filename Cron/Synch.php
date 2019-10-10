@@ -10,7 +10,7 @@
  * @package    Combinatoria_Doppler
  * @author     Combinatoria
  */
-namespace Combinatoria\Doppler\Cron\Sync;
+namespace Combinatoria\Doppler\Cron;
 
 use Exception;
 use Combinatoria\Doppler\Helper\Doppler;

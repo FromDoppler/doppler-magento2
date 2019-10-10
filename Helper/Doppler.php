@@ -43,7 +43,7 @@ class Doppler extends AbstractHelper{
     protected $_map;
     protected $_mapFactory;
 
-    protected $_leadMapping;
+    protected $_leadMapping = array();
 
     private $integration;
     private $storeManager;
@@ -424,59 +424,62 @@ class Doppler extends AbstractHelper{
 
                 $body .= '{ "email": "' . $customer['email'] . '", ';
 
+                
                 $body .= ' "fields": [ ';
+                
+                if($mappedFieldsCount > 0){
+                    $customerAttributesArrayKeys = array_keys($this->_customerAttributes);
 
-                $customerAttributesArrayKeys = array_keys($this->_customerAttributes);
-
-                for ($i = 0; $i < $mappedFieldsCount; $i++)
-                {
-                    $fieldName = $leadMappingArrayKeys[$i];
-                    $customerAttributeValue = $this->_customerAttributes[$customerAttributesArrayKeys[$i]];
-
-                    // Validate each mapped field before exporting
-                    $dopplerFieldDataType = $dopplerFieldsDataType[$fieldName];
-
-                    switch ($dopplerFieldDataType) {
-                        case 'date':
-                            // Format: yyyy-MM-dd
-                            if ($dopplerFieldDataType == 'date' ||
-                                $dopplerFieldDataType == 'datetime'
-                            ) {
-                                $customerAttributeValue = $this->getFormattedDate($customerAttributeValue);
-                            }
-                            break;
-                        case 'gender':
-                            // M or F
-                            // Magento saves 1 for Male and 2 for Female
-                            // Conver that to M for Male and F for Female
-                            if ($customerAttributesArrayKeys[$i] == 'gender')
-                            {
-                                if ($customerAttributeValue == 1)
-                                {
-                                    $customerAttributeValue = 'M';
-                                } else if ($customerAttributeValue == 2)
-                                {
-                                    $customerAttributeValue = 'F';
-                                }
-                            }
-
-                            break;
-                        case 'country':
-                            // Country: ISO 3166-1 alpha 2
-                            // Check if attribute is 'country', if not return false
-                            // Magento already stores the country in ISO 3166-1 alpha 2
-                            // No conversion is necessary
-                            break;
-                        default:
-                    }
-
-                    $body .= '{ "name": "' . $fieldName . '", "value": "' . $customerAttributeValue . '"';
-
-                    if (($i + 1) < $mappedFieldsCount)
+                    for ($i = 0; $i < $mappedFieldsCount; $i++)
                     {
-                        $body .= '},';
-                    } else {
-                        $body .= '}';
+                        $fieldName = $leadMappingArrayKeys[$i];
+                        $customerAttributeValue = $this->_customerAttributes[$customerAttributesArrayKeys[$i]];
+
+                        // Validate each mapped field before exporting
+                        $dopplerFieldDataType = $dopplerFieldsDataType[$fieldName];
+
+                        switch ($dopplerFieldDataType) {
+                            case 'date':
+                                // Format: yyyy-MM-dd
+                                if ($dopplerFieldDataType == 'date' ||
+                                    $dopplerFieldDataType == 'datetime'
+                                ) {
+                                    $customerAttributeValue = $this->getFormattedDate($customerAttributeValue);
+                                }
+                                break;
+                            case 'gender':
+                                // M or F
+                                // Magento saves 1 for Male and 2 for Female
+                                // Conver that to M for Male and F for Female
+                                if ($customerAttributesArrayKeys[$i] == 'gender')
+                                {
+                                    if ($customerAttributeValue == 1)
+                                    {
+                                        $customerAttributeValue = 'M';
+                                    } else if ($customerAttributeValue == 2)
+                                    {
+                                        $customerAttributeValue = 'F';
+                                    }
+                                }
+
+                                break;
+                            case 'country':
+                                // Country: ISO 3166-1 alpha 2
+                                // Check if attribute is 'country', if not return false
+                                // Magento already stores the country in ISO 3166-1 alpha 2
+                                // No conversion is necessary
+                                break;
+                            default:
+                        }
+
+                        $body .= '{ "name": "' . $fieldName . '", "value": "' . $customerAttributeValue . '"';
+
+                        if (($i + 1) < $mappedFieldsCount)
+                        {
+                            $body .= '},';
+                        } else {
+                            $body .= '}';
+                        }
                     }
                 }
 
@@ -512,6 +515,7 @@ class Doppler extends AbstractHelper{
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 "Authorization: token " . $apiKeyValue,
                 "Content-Type: application/json",
+                "X-Doppler-Subscriber-Origin: Magento"
             ]);
 
             // Set body

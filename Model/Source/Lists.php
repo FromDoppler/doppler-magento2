@@ -23,7 +23,7 @@ class Lists implements \Magento\Framework\Option\ArrayInterface
     {
         $dopplerLists = $this->_dopplerHelper->getDopplerLists();
         $options[] = [
-            'label' => 'Select a list',
+            'label' => __('Select a list'),
             'value' => '',
         ];
         foreach($dopplerLists as $list)
