@@ -98,6 +98,9 @@ class Customers extends Action {
                     ->addFieldToFilter('sales_order.created_at', ['gteq' => $lastSync.' 00:00:00'])
                     ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
                     ->load();
+
+                $subscribers = $this->_subcriberCollectionFactory->create()
+                    ->showCustomerInfo();
             }else{
                 $customers = $this->_addressFactory->create()->getCollection()
                     ->join('sales_order',
@@ -105,19 +108,21 @@ class Customers extends Action {
                     ->addAttributeToSelect("*")
                     ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
                     ->load();
+
+                $subscribers = $this->_subcriberCollectionFactory->create()
+                    ->addFieldToFilter('change_status_at', ['gteq' => $lastSync.' 00:00:00'])
+                    ->showCustomerInfo();
             }
 
             $customers->getSelect()->group('email');
 
             $listId = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
 
-            $subscribers = $this->_subcriberCollectionFactory->create()->showCustomerInfo();
-
             $listIdSub = $this->_dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
 
             try {
-                $this->_dopplerHelper->exportMultipleCustomersToDoppler($customers, $listId);
                 $this->_dopplerHelper->exportMultipleCustomersToDoppler($subscribers, $listIdSub);
+                $this->_dopplerHelper->exportMultipleCustomersToDoppler($customers, $listId);
 
                 $this->_dopplerHelper->setConfigValue('doppler_config/synch/last_sync', date("Y-m-d"));
                 $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
