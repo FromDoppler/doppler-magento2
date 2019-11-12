@@ -278,6 +278,16 @@ class Doppler extends AbstractHelper{
      */
     public function createDopplerLists($name)
     {
+        if($name == ''){
+            $errorMsg = __("Ouch! You need to name the List to create it.");
+            throw new \Exception($errorMsg);
+        }
+
+        if(strlen($name) > 100){
+            $errorMsg = __("Oops! You’ve reached the maximum number of characters.");
+            throw new \Exception($errorMsg);
+        }
+
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
@@ -322,9 +332,18 @@ class Doppler extends AbstractHelper{
                     return $responseContent['createdResourceId'];
                 } else {
                     $responseContent = json_decode($resp, true);
-                    throw new \Exception(
-                        __('The following errors occurred creating your list: ' . $responseContent['title'])
-                    );
+
+                    if($responseContent['errorCode'] == 0){
+                        $errorMsg = __("Ouch! You've made several actions in a short period of time. Please wait a few minutes before making another one.");
+                    }elseif($responseContent['errorCode'] == 2){
+                        $errorMsg = __("Ouch! You've already used this name for another List.");
+                    }elseif($responseContent['errorCode'] == 3){
+                        $errorMsg = __("Ouch! You've reached the maximum number of Lists created.");
+                    }else{
+                        $errorMsg = __($responseContent['detail']);
+                    }
+
+                    throw new \Exception($errorMsg);
                 }
             }
             // Close request to clear up some resources
@@ -383,23 +402,9 @@ class Doppler extends AbstractHelper{
 
             $customersArray = $customers->getData();
 
-            $list = $this->getDopplerSubscribers($dopplerListId);
-
             $items = 0;
             foreach ($customersArray as $customer)
             {
-                if(isset($customer['email'])){
-                    if($this->isSynchronized($customer['email'],$list)){
-                        continue;
-                    }
-                }
-
-                if(isset($customer['subscriber_email'])){
-                    if($this->isSynchronized($customer['subscriber_email'],$list)){
-                        continue;
-                    }
-                }
-
                 $items = 1;
                 // Load Magento customer attributes from mapped fields
                 foreach ($dopplerMappedFields as $field)
@@ -534,11 +539,16 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    $errorResponseArray = $responseContent['errors'];
-                    foreach ($errorResponseArray as $error) {
-                        $errors[] = $error['detail'];
+                    if(isset($responseContent['errors'])){
+                        $errorResponseArray = $responseContent['errors'];
+                        foreach ($errorResponseArray as $error) {
+                            $errors[] = $error['detail'];
+                        }
+                        throw new \Exception(implode("\n",$errors));
+                    }else{
+                        throw new \Exception($responseContent['detail']);
                     }
-                    throw new \Exception(implode("\n",$errors));
+
                 }else{
                     return true;
                 }

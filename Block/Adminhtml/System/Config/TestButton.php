@@ -50,7 +50,7 @@ class TestButton extends Field
         $originalData = $element->getOriginalData();
         $this->addData(
             [
-                'button_label' => $originalData['button_label'],
+                'button_label' => __($originalData['button_label']),
                 'button_url'   => $this->getUrl($originalData['button_url']),
                 'html_id'      => $element->getHtmlId(),
             ]

@@ -60,67 +60,6 @@ class InstallData implements InstallDataInterface{
     {
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
-        /* Add DopplerSynced Attribute */
-        $eavSetup->addAttribute(
-            \Magento\Customer\Model\Customer::ENTITY,
-            'doppler_synced',
-            [
-                'type'         => 'int',
-                'label'        => 'Exported to Doppler',
-                'input'        => 'boolean',
-                'required'     => false,
-                'visible'      => true,
-                'user_defined' => false,
-                'position'     => 998,
-                'system'       => 0,
-            ]
-        );
-        $syncedAttribute = $this->eavConfig->getAttribute(Customer::ENTITY, 'doppler_synced');
-
-        // more used_in_forms ['adminhtml_checkout','adminhtml_customer','adminhtml_customer_address','customer_account_edit','customer_address_edit','customer_register_address']
-        $syncedAttribute->setData(
-            'used_in_forms',
-            ['adminhtml_customer']
-        );
-
-        $syncedAttribute->addData([
-            'attribute_set_id' => 1,
-            'attribute_group_id' => 1
-        ]);
-
-        $syncedAttribute->save();
-
-        /* Add DopplerExportStatus Attribute */
-        $eavSetup->addAttribute(
-            \Magento\Customer\Model\Customer::ENTITY,
-            'status_doppler_sync',
-            [
-                'type'         => 'varchar',
-                'label'        => 'Doppler Export Status',
-                'default'      => 'Pending',
-                'input'        => 'text',
-                'required'     => false,
-                'visible'      => true,
-                'user_defined' => true,
-                'position'     => 999,
-                'system'       => 0,
-            ]
-        );
-        $statusAttribute = $this->eavConfig->getAttribute(Customer::ENTITY, 'status_doppler_sync');
-
-        // more used_in_forms ['adminhtml_checkout','adminhtml_customer','adminhtml_customer_address','customer_account_edit','customer_address_edit','customer_register_address']
-        $statusAttribute->setData(
-            'used_in_forms',
-            ['adminhtml_customer']
-        );
-
-        $statusAttribute->addData([
-            'attribute_set_id' => 1,
-            'attribute_group_id' => 1
-        ]);
-
-        $statusAttribute->save();
-
         $this->resourceConfig->saveConfig(
             'doppler_config/integration/enabled',
             0,

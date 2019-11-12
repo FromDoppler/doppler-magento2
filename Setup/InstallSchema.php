@@ -38,23 +38,6 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         /**
-         * Create Log table
-         */
-        if (!$installer->tableExists('combinatoria_doppler_log')) {
-
-            $table = $installer->getConnection()
-                ->newTable($installer->getTable('combinatoria_doppler_log'))
-                ->addColumn('id', Table::TYPE_INTEGER, null, ['identity' => true, 'nullable' => false, 'primary'  => true, 'unsigned' => true], 'Log ID')
-                ->addColumn('entry', Table::TYPE_TEXT, 255, ['nullable' => false], 'Entry')
-                ->addColumn('request', Table::TYPE_TEXT, '64k', ['nullable' => true], 'Request')
-                ->addColumn('response', Table::TYPE_TEXT, '64k', ['nullable' => true], 'Response')
-                ->addColumn('status', Table::TYPE_SMALLINT, 1, ['nullable' => false], 'Status')
-                ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, [], 'Created At');
-
-            $installer->getConnection()->createTable($table);
-        }
-
-        /**
          * Create Leadmap table
          */
         if (!$installer->tableExists('combinatoria_doppler_leadmap')) {

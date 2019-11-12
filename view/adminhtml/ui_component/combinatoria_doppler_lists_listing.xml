@@ -60,12 +60,14 @@
                     <item name="filter" xsi:type="string">textRange</item>
 <!--                    <item name="sorting" xsi:type="string">asc</item>-->
                     <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
         <column name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" xsi:type="string">text</item>
@@ -80,6 +82,7 @@
         <column name="currentStatus">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" xsi:type="string">text</item>
@@ -94,6 +97,7 @@
         <column name="subscribersCount">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" xsi:type="string">text</item>

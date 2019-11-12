@@ -13,8 +13,12 @@ class Script extends \Magento\Framework\View\Element\Template
         $this->_dopplerHelper = $dopplerHelper;
     }
 
-    public function getPopUpScript(){
-        return $this->_dopplerHelper->getConfigValue('doppler_config/scripts/popup');
+    public function getPopUpBodyScript(){
+        return $this->_dopplerHelper->getConfigValue('doppler_config/scripts/popup_body');
+    }
+
+    public function getPopUpHeadScript(){
+        return $this->_dopplerHelper->getConfigValue('doppler_config/scripts/popup_head');
     }
 
     public function getTrackScript(){

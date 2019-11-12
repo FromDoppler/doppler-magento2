@@ -6,9 +6,9 @@
     position: relative;
     top: -0.3rem;
     width: 28px;
-    height: 26px;
+    height: 28px;
     background: url(../images/menu-icon-doppler-pasive.png);
-    background-size: 28px 26px;
+    background-size: 28px 28px;
     margin: 0 auto;
 }
 
@@ -19,9 +19,9 @@
     position: relative;
     top: -0.3rem;
     width: 28px;
-    height: 26px;
+    height: 28px;
     background: url(../images/menu-icon-doppler-active.png);
-    background-size: 28px 26px;
+    background-size: 28px 28px;
     margin: 0 auto;
 }
 

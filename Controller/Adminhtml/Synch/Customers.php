@@ -63,7 +63,8 @@ class Customers extends Action {
         Doppler  $dopplerHelper,
         Address $address,
         AddressFactory $addressFactory,
-        CollectionFactory $subcriberCollectionFactory
+        CollectionFactory $subcriberCollectionFactory,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     )
     {
         $this->_resultPageFactory = $resultPageFactory;
@@ -72,6 +73,7 @@ class Customers extends Action {
         $this->_address = $address;
         $this->_addressFactory = $addressFactory;
         $this->_subcriberCollectionFactory = $subcriberCollectionFactory;
+        $this->cacheTypeList = $cacheTypeList;
 
         parent::__construct($context);
     }
@@ -86,9 +88,25 @@ class Customers extends Action {
         if($this->_dopplerHelper->getConfigValue('doppler_config/config/enabled')) {
             $result = [];
 
-            $customers = $this->_addressFactory->create()->getCollection()
-                ->addAttributeToSelect("*")
-                ->load();
+            $lastSync = $this->_dopplerHelper->getConfigValue('doppler_config/synch/last_sync');
+
+            if($lastSync != null){
+                $customers = $this->_addressFactory->create()->getCollection()
+                    ->join('sales_order',
+                        'main_table.parent_id = sales_order.entity_id')
+                    ->addAttributeToSelect("*")
+                    ->addFieldToFilter('sales_order.created_at', ['gteq' => $lastSync.' 00:00:00'])
+                    ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
+                    ->load();
+            }else{
+                $customers = $this->_addressFactory->create()->getCollection()
+                    ->join('sales_order',
+                        'main_table.parent_id = sales_order.entity_id')
+                    ->addAttributeToSelect("*")
+                    ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
+                    ->load();
+            }
+
             $customers->getSelect()->group('email');
 
             $listId = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
@@ -100,6 +118,9 @@ class Customers extends Action {
             try {
                 $this->_dopplerHelper->exportMultipleCustomersToDoppler($customers, $listId);
                 $this->_dopplerHelper->exportMultipleCustomersToDoppler($subscribers, $listIdSub);
+
+                $this->_dopplerHelper->setConfigValue('doppler_config/synch/last_sync', date("Y-m-d"));
+                $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
 
                 $result['status'] = true;
                 $result['content'] = __('Customers has been synchronized.');
