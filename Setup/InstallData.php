@@ -76,7 +76,7 @@ class InstallData implements InstallDataInterface{
                 'endpoint' => '',
                 'setup_type' => '0'
             );
-            try{
+
                 // Code to create Integration
                 $integrationFactory = $this->integration->create();
                 $integration = $integrationFactory->setData($integrationData);
@@ -109,10 +109,6 @@ class InstallData implements InstallDataInterface{
                     'default',
                     0
                 );
-
-            }catch(Exception $e){
-                echo 'Error : '.$e->getMessage();
-            }
         }
     }
 }

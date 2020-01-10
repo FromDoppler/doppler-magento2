@@ -5,7 +5,7 @@
             <label>Doppler</label>
         </tab>
         <section id="doppler_config" translate="label" type="text" sortOrder="-5000" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Configuration</label>
+            <label><![CDATA[Email & Automation Marketing]]></label>
             <tab>doppler</tab>
             <resource>Combinatoria_Doppler::configuration</resource>
             <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"  showInStore="1">

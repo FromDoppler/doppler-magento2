@@ -96,7 +96,11 @@ class Customers extends Action {
                         'main_table.parent_id = sales_order.entity_id')
                     ->addAttributeToSelect("*")
                     ->addFieldToFilter('sales_order.created_at', ['gteq' => $lastSync.' 00:00:00'])
-                    ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
+                    ->addFieldToFilter('main_table.address_type', ['eq' => 'billing'])
+                    ->setOrder(
+                        'sales_order.created_at',
+                        'desc'
+                    )
                     ->load();
 
                 $subscribers = $this->_subcriberCollectionFactory->create()
@@ -106,7 +110,11 @@ class Customers extends Action {
                     ->join('sales_order',
                         'main_table.parent_id = sales_order.entity_id')
                     ->addAttributeToSelect("*")
-                    ->addFieldToFilter('main_table.address_type', ['eq' => 'shipping'])
+                    ->addFieldToFilter('main_table.address_type', ['eq' => 'billing'])
+                    ->setOrder(
+                        'sales_order.created_at',
+                        'desc'
+                    )
                     ->load();
 
                 $subscribers = $this->_subcriberCollectionFactory->create()
@@ -114,7 +122,7 @@ class Customers extends Action {
                     ->showCustomerInfo();
             }
 
-            $customers->getSelect()->group('email');
+//            $customers->getSelect()->group('email');
 
             $listId = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
 

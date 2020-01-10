@@ -88,7 +88,7 @@ class ConfigChanged implements ObserverInterface{
                         }
 
                         try {
-                            $name = 'Magento Clients';
+                            $name = 'Compradores Magento';
                             $listId = $this->_helper->createDopplerLists($name);
                             $this->_helper->setConfigValue('doppler_config/synch/customers_list', $listId);
                         } catch (\Exception $e) {
@@ -108,7 +108,7 @@ class ConfigChanged implements ObserverInterface{
                         }
 
                         try {
-                            $name = 'Magento Subscribers';
+                            $name = 'Suscriptores Magento';
                             $listId = $this->_helper->createDopplerLists($name);
                             $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $listId);
                         } catch (\Exception $e) {

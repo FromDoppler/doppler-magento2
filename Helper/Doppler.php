@@ -402,6 +402,7 @@ class Doppler extends AbstractHelper{
 
             $customersArray = $customers->getData();
 
+            $emails = array();
             $items = 0;
             foreach ($customersArray as $customer)
             {
@@ -425,6 +426,12 @@ class Doppler extends AbstractHelper{
                 if(!isset($customer['email']) && isset($customer['subscriber_email'])){
                     $customer['email'] = $customer['subscriber_email'];
                 }
+
+                if(in_array($customer['email'],$emails)){
+                    continue;
+                }
+
+                $emails[] = $customer['email'];
                 //$this->log($this->_customerAttributes,'customer-attributes.log');
 
                 $body .= '{ "email": "' . $customer['email'] . '", ';
@@ -440,6 +447,9 @@ class Doppler extends AbstractHelper{
                         $fieldName = $leadMappingArrayKeys[$i];
                         $customerAttributeValue = $this->_customerAttributes[$customerAttributesArrayKeys[$i]];
 
+                        if($customerAttributeValue == '' || $customerAttributeValue == null){
+                            continue;
+                        }
                         // Validate each mapped field before exporting
                         $dopplerFieldDataType = $dopplerFieldsDataType[$fieldName];
 
