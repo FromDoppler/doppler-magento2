@@ -38,6 +38,7 @@ class ConfigChanged implements ObserverInterface{
     private $messageManager;
 
     protected $cacheTypeList;
+
     /**
      * Constructor
      *
@@ -71,50 +72,91 @@ class ConfigChanged implements ObserverInterface{
             $this->_helper->setConfigValue(Doppler::CONFIG_DOPPLER_SYNC_CRON_MODEL_PATH, null);
         }
 
+        if($this->_helper->getConfigValue('doppler_config/config/key_changed')){
+            $oldKey = $this->_helper->getConfigValue('doppler_config/config/key_old');
+            $oldUser = $this->_helper->getConfigValue('doppler_config/config/username_old');
+            if($this->_helper->getConfigValue('doppler_config/config/enabled')) {
+                if($this->_helper->getConfigValue('doppler_config/integration/enabled')){
+                    try{
+                        $message = $this->_helper->deleteOldIntegration();
+                        $this->_helper->setConfigValue('doppler_config/integration/enabled', 0);
+                        $integrationDisable = true;
+                    }catch(\Exception $e){
+                        $this->messageManager->addErrorMessage(__($e->getMessage()));
+                    }
+                }
+            }
+
+            $this->_helper->setConfigValue('doppler_config/synch/last_sync', '');
+            $this->_helper->setConfigValue('doppler_config/synch/customers_list', '');
+            $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', '');
+            $this->_helper->setConfigValue('doppler_config/synch/clients_list', '');
+            $this->_helper->setConfigValue('doppler_config/scripts/popup_head', '');
+            $this->_helper->setConfigValue('doppler_config/scripts/popup_body', '');
+            $this->_helper->setConfigValue('doppler_config/scripts/tracking', '');
+            $this->_helper->setConfigValue('doppler_config/config/key_old', '');
+            $this->_helper->setConfigValue('doppler_config/config/username_old', '');
+            $this->_helper->setConfigValue('doppler_config/config/key_changed', 0);
+            $this->_helper->setConfigValue('doppler_config/config/enabled', 0);
+
+            $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+            $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
+
+            return;
+        }
+
         if($this->_helper->getConfigValue('doppler_config/config/enabled')) {
-            if(!$this->_helper->getConfigValue('doppler_config/integration/enabled')){
+            if(!$this->_helper->getConfigValue('doppler_config/integration/enabled') || isset($integrationDisable)){
                 try{
                     $message = $this->_helper->putIntegration();
                     $this->_helper->setConfigValue('doppler_config/integration/enabled', 1);
 
                     /* Activate default lists */
-                    if($this->_helper->getConfigValue('doppler_config/synch/customers_list') == ''){
-                        $lists = $this->_helper->getDopplerLists();
-                        foreach ($lists as $list){
-                            if($list['name'] == 'Clientes de Magento' || $list['name'] == 'Magento Clients'){
-                                $this->_helper->setConfigValue('doppler_config/synch/customers_list', $list['listId']);
-                                break;
-                            }
-                        }
-
-                        try {
-                            $name = 'Compradores Magento';
-                            $listId = $this->_helper->createDopplerLists($name);
-                            $this->_helper->setConfigValue('doppler_config/synch/customers_list', $listId);
-                        } catch (\Exception $e) {
-                            $this->messageManager->addErrorMessage(__($e->getMessage()));
-                        }
-                    }
-
-                    if($this->_helper->getConfigValue('doppler_config/synch/subscribers_list') == ''){
-                        if(!isset($lists)){
-                            $lists = $this->_helper->getDopplerLists();
-                        }
-                        foreach ($lists as $list){
-                            if($list['name'] == 'Suscriptores de Magento' || $list['name'] == 'Magento Subscribers'){
-                                $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $list['listId']);
-                                break;
-                            }
-                        }
-
-                        try {
-                            $name = 'Suscriptores Magento';
-                            $listId = $this->_helper->createDopplerLists($name);
-                            $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $listId);
-                        } catch (\Exception $e) {
-                            $this->messageManager->addErrorMessage(__($e->getMessage()));
-                        }
-                    }
+//                    if($this->_helper->getConfigValue('doppler_config/synch/customers_list') == ''){
+//                        $lists = $this->_helper->getDopplerLists();
+//                        $createCustomerList = true;
+//                        foreach ($lists as $list){
+//                            if($list['name'] == 'Compradores Magento' || $list['name'] == 'Magento Buyers'){
+//                                $this->_helper->setConfigValue('doppler_config/synch/customers_list', $list['listId']);
+//                                $createCustomerList = false;
+//                                break;
+//                            }
+//                        }
+//
+//                        if($createCustomerList){
+//                            try {
+//                                $name = 'Compradores Magento';
+//                                $listId = $this->_helper->createDopplerLists($name);
+//                                $this->_helper->setConfigValue('doppler_config/synch/customers_list', $listId);
+//                            } catch (\Exception $e) {
+//                                $this->messageManager->addErrorMessage(__($e->getMessage()));
+//                            }
+//                        }
+//                    }
+//
+//                    if($this->_helper->getConfigValue('doppler_config/synch/subscribers_list') == ''){
+//                        if(!isset($lists)){
+//                            $lists = $this->_helper->getDopplerLists();
+//                        }
+//                        $createSuscriberList = true;
+//                        foreach ($lists as $list){
+//                            if($list['name'] == 'Suscriptores Magento' || $list['name'] == 'Magento Subscribers'){
+//                                $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $list['listId']);
+//                                $createSuscriberList = false;
+//                                break;
+//                            }
+//                        }
+//
+//                        if($createSuscriberList){
+//                            try {
+//                                $name = 'Suscriptores Magento';
+//                                $listId = $this->_helper->createDopplerLists($name);
+//                                $this->_helper->setConfigValue('doppler_config/synch/subscribers_list', $listId);
+//                            } catch (\Exception $e) {
+//                                $this->messageManager->addErrorMessage(__($e->getMessage()));
+//                            }
+//                        }
+//                    }
 
                     $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
                     $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);

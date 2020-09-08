@@ -14,7 +14,6 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-
         <add id="Combinatoria_Doppler::menu"
              title="Doppler"
              module="Combinatoria_Doppler"
@@ -34,10 +33,24 @@
              resource="Combinatoria_Doppler::configuration"
              parent="Combinatoria_Doppler::doppler"/>
         <add id="Combinatoria_Doppler::map"
-             title="Fields mapping"
+             title="Buyers mapping"
              module="Combinatoria_Doppler"
              sortOrder="20"
              action="doppler/map/index/scope/stores"
+             resource="Combinatoria_Doppler::configuration"
+             parent="Combinatoria_Doppler::doppler"/>
+        <add id="Combinatoria_Doppler::mapcustomers"
+             title="Customers mapping"
+             module="Combinatoria_Doppler"
+             sortOrder="25"
+             action="doppler/mapcustomers/index/scope/stores"
+             resource="Combinatoria_Doppler::configuration"
+             parent="Combinatoria_Doppler::doppler"/>
+        <add id="Combinatoria_Doppler::mapsubscribers"
+             title="Subscribers mapping"
+             module="Combinatoria_Doppler"
+             sortOrder="26"
+             action="doppler/mapsubscribers/index/scope/stores"
              resource="Combinatoria_Doppler::configuration"
              parent="Combinatoria_Doppler::doppler"/>
         <add id="Combinatoria_Doppler::configuration"

@@ -26,6 +26,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Combinatoria\Doppler\Model\ResourceModel\Map\Collection as Map;
 use Combinatoria\Doppler\Model\ResourceModel\Map\CollectionFactory as MapFactory;
 use Magento\Integration\Model\IntegrationFactory;
+use Combinatoria\Doppler\Model\ResourceModel\MapCustomers\Collection as MapCustomers;
+use Combinatoria\Doppler\Model\ResourceModel\MapCustomers\CollectionFactory as MapCustomersFactory;
+use Combinatoria\Doppler\Model\ResourceModel\MapSubscribers\Collection as MapSubscribers;
+use Combinatoria\Doppler\Model\ResourceModel\MapSubscribers\CollectionFactory as MapSubscribersFactory;
 
 /**
  * Class Doppler
@@ -43,10 +47,18 @@ class Doppler extends AbstractHelper{
     protected $_map;
     protected $_mapFactory;
 
+    protected $_mapCustomers;
+    protected $_mapCustomersFactory;
+
+    protected $_mapSubscribers;
+    protected $_mapSubscribersFactory;
+
     protected $_leadMapping = array();
 
     private $integration;
     private $storeManager;
+
+    protected $cacheTypeList;
 
     const CONFIG_DOPPLER_SYNC_CRON_FREQUENCY_PATH = 'doppler_config/synch/frequency';
     const CONFIG_DOPPLER_SYNC_CRON_EXPR_PATH               = 'crontab/default/jobs/doppler_synch/schedule/cron_expr';
@@ -65,7 +77,12 @@ class Doppler extends AbstractHelper{
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Map $map,
         MapFactory $mapFactory,
-        IntegrationFactory $integrationFactory
+        IntegrationFactory $integrationFactory,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        MapCustomers $mapCustomers,
+        MapCustomersFactory $mapCustomersFactory,
+        MapSubscribers $mapSubscribers,
+        MapSubscribersFactory $mapSubscribersFactory
     ) {
         parent::__construct($context);
 
@@ -77,6 +94,11 @@ class Doppler extends AbstractHelper{
         $this->_map = $map;
         $this->_mapFactory = $mapFactory;
         $this->integration = $integrationFactory;
+        $this->cacheTypeList = $cacheTypeList;
+        $this->_mapCustomers = $mapCustomers;
+        $this->_mapCustomersFactory = $mapCustomersFactory;
+        $this->_mapSubscribers = $mapSubscribers;
+        $this->_mapSubscribersFactory = $mapSubscribersFactory;
     }
 
     /**
@@ -356,17 +378,18 @@ class Doppler extends AbstractHelper{
      *
      * @param $customers
      * @param $dopplerListId
+     * @param $type
      *
      * @return bool $errorOnExport
      */
-    public function exportMultipleCustomersToDoppler($customers, $dopplerListId)
+    public function exportMultipleCustomersToDoppler($customers, $dopplerListId, $type)
     {
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
         if($usernameValue != '' && $apiKeyValue != '')
         {
-            $dopplerMappedFields = $this->getDopplerMappedFields();
+            $dopplerMappedFields = $this->getDopplerMappedFields($type);
 
             // Create body
             $body = '{ "fields": [ ';
@@ -401,6 +424,8 @@ class Doppler extends AbstractHelper{
             $customerCounter = 1;
 
             $customersArray = $customers->getData();
+
+            $this->_customerAttributes = [];
 
             $emails = array();
             $items = 0;
@@ -572,10 +597,20 @@ class Doppler extends AbstractHelper{
         }
     }
 
-    public function getDopplerMappedFields() {
+    public function getDopplerMappedFields($type) {
+        $this->_leadMapping = [];
 
-        // Get Doppler mapped fields from Magento
-        $leadmapCollection = $this->_mapFactory->create();
+        switch ($type){
+            case "buyer":
+                $leadmapCollection = $this->_mapFactory->create();
+                break;
+            case "client":
+                $leadmapCollection = $this->_mapCustomersFactory->create();
+                break;
+            case "subscriber":
+                $leadmapCollection = $this->_mapSubscribersFactory->create();
+                break;
+        }
 
         foreach ($leadmapCollection->getData() as $leadmap)
         {
@@ -857,6 +892,58 @@ class Doppler extends AbstractHelper{
         }
     }
 
+    public function deleteOldIntegration(){
+        $usernameValue = $this->getConfigValue('doppler_config/config/username_old');
+        $apiKeyValue = $this->getConfigValue('doppler_config/config/key_old');
+
+        if($usernameValue != '' && $apiKeyValue != '')
+        {
+            // Get cURL resource
+            $ch = curl_init();
+
+            // Set url
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/integrations/magento');
+
+            // Set method
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+            // Set options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            // Set headers
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Authorization: token " . $apiKeyValue,
+                "Content-Type: application/json",
+            ]);
+
+            // Send the request & save response to $resp
+            $resp = curl_exec($ch);
+
+            if ($resp)
+            {
+                // There has been an error when trying to export the customer to Doppler
+                // Then process the error message
+                $responseContent = json_decode($resp, true);
+
+                // If the response contains the 'error' item, then it's a validation error
+                if (isset($responseContent['status']) && $responseContent['status'] != 200)
+                {
+                    if($responseContent['errorCode'] == 40){
+                        $errorMsg = __("Ouch! You can't disconnect the integration 'cause you've Campaigns associated to it.");
+                    }else{
+                        $errorMsg = __($responseContent['detail']);
+                    }
+
+                    throw new \Exception($errorMsg);
+                }else{
+                    return true;
+                }
+            }
+            // Close request to clear up some resources
+            curl_close($ch);
+        }
+    }
+
     public function deleteList($listId)
     {
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
@@ -936,5 +1023,29 @@ class Doppler extends AbstractHelper{
                 }
             }
         }
+    }
+
+    public function cleanCache(){
+        $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+        $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
+    }
+
+    public function isFieldDuplicated($data){
+        $doppler = [];
+        $magento = [];
+
+        foreach($data as $k => $item){
+            if(in_array($item['magento_field_name'],$magento)){
+                return __("Error a Magento field is more than once: ") . $item['magento_field_name'];
+            }
+            if(in_array($item['doppler_field_name'],$doppler)){
+                return __("Error a Doppler field is more than once: ") . $item['doppler_field_name'];
+            }
+
+            $magento[] = $item['magento_field_name'];
+            $doppler[] = $item['doppler_field_name'];
+        }
+
+        return false;
     }
 }

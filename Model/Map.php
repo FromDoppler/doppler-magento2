@@ -1,6 +1,8 @@
 <?php
 namespace Combinatoria\Doppler\Model;
+
 use Magento\Framework\Model\AbstractModel;
+
 class Map extends AbstractModel
 {
     const CACHE_TAG = 'combinatoria_doppler';

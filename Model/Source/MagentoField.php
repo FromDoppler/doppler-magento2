@@ -1,5 +1,6 @@
 <?php
 namespace Combinatoria\Doppler\Model\Source;
+
 class MagentoField implements \Magento\Framework\Option\ArrayInterface
 {
     protected $_attributeFactory;
@@ -16,6 +17,10 @@ class MagentoField implements \Magento\Framework\Option\ArrayInterface
         ];
         foreach($attributeInfo as $attributes)
         {
+            if($attributes->getAttributeCode() == 'email'){
+                continue;
+            }
+
             if($attributes->getAttributeCode() == 'region_id'){
                 $label = __("State/Province ID");
             }else{

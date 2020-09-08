@@ -26,5 +26,9 @@
 }
 
 .doppler-dynamic-rows .admin__field-control{
-    width: calc( (100%) * .7 - 30px ) !important;
+    width: calc( (100%) - 30px ) !important;
+}
+
+.doppler-dynamic-rows .admin__field-control select {
+    width: 100%;
 }

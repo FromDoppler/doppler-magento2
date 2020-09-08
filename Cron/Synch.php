@@ -17,6 +17,7 @@ use Combinatoria\Doppler\Helper\Doppler;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\AddressFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
+use Magento\Customer\Model\CustomerFactory;
 
 /**
  * Class OrdersSync
@@ -31,6 +32,7 @@ class Synch {
 
     protected $_address;
     protected $_addressFactory;
+    protected $_customerFactory;
 
     protected $_subcriberCollectionFactory;
 
@@ -44,7 +46,8 @@ class Synch {
         Address $address,
         AddressFactory $addressFactory,
         CollectionFactory $subcriberCollectionFactory,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        CustomerFactory $customerFactory
     )
     {
         $this->_dopplerHelper = $dopplerHelper;
@@ -52,6 +55,7 @@ class Synch {
         $this->_addressFactory = $addressFactory;
         $this->_subcriberCollectionFactory = $subcriberCollectionFactory;
         $this->cacheTypeList = $cacheTypeList;
+        $this->_customerFactory = $customerFactory;
     }
 
     /**
@@ -61,6 +65,14 @@ class Synch {
      */
     public function execute(){
         if($this->_dopplerHelper->getConfigValue('doppler_config/synch/enabled_cron')){
+            $listId = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
+            $listIdSub = $this->_dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
+            $listIdCli = $this->_dopplerHelper->getConfigValue('doppler_config/synch/clients_list');
+
+            if($listId == '' && $listIdSub == '' && $listIdCli == ''){
+                return;
+            }
+
             $result = [];
 
             $lastSync = $this->_dopplerHelper->getConfigValue('doppler_config/synch/last_sync');
@@ -79,7 +91,11 @@ class Synch {
                     ->load();
 
                 $subscribers = $this->_subcriberCollectionFactory->create()
+                    ->addFieldToFilter('change_status_at', ['gteq' => $lastSync.' 00:00:00'])
                     ->showCustomerInfo();
+
+                $clients = $this->_customerFactory->create()->getCollection()
+                    ->addFieldToFilter('updated_at', ['gteq' => $lastSync.' 00:00:00']);
             }else{
                 $customers = $this->_addressFactory->create()->getCollection()
                     ->join('sales_order',
@@ -93,19 +109,25 @@ class Synch {
                     ->load();
 
                 $subscribers = $this->_subcriberCollectionFactory->create()
-                    ->addFieldToFilter('change_status_at', ['gteq' => $lastSync.' 00:00:00'])
                     ->showCustomerInfo();
+
+                $clients = $this->_customerFactory->create()->getCollection();
             }
 
 //            $customers->getSelect()->group('email');
 
-            $listId = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
-
-            $listIdSub = $this->_dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
-
             try {
-                $this->_dopplerHelper->exportMultipleCustomersToDoppler($subscribers, $listIdSub);
-                $this->_dopplerHelper->exportMultipleCustomersToDoppler($customers, $listId);
+                if($listIdSub != ''){
+                    $this->_dopplerHelper->exportMultipleCustomersToDoppler($subscribers, $listIdSub,"subscriber");
+                }
+
+                if($listId != ''){
+                    $this->_dopplerHelper->exportMultipleCustomersToDoppler($customers, $listId,"buyer");
+                }
+
+                if($listIdCli != ''){
+                    $this->_dopplerHelper->exportMultipleCustomersToDoppler($clients, $listIdCli,"client");
+                }
 
                 $this->_dopplerHelper->setConfigValue('doppler_config/synch/last_sync', date("Y-m-d"));
                 $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
