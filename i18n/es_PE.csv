@@ -77,16 +77,16 @@ Cancel,Cancelar
 "Ouch! You need to name the List to create it.","¡Ouch! Necesitas nombrar la Lista para poder crearla."
 "Select All","Seleccionar Todo"
 ready,Listo
-"Lead Mapping","Mapeo de Compradores"
+"Buyers Mapping","Mapeo de Compradores"
 "Doppler Field","Campo de Doppler"
 "Magento Field","Campo de Magento"
 Actions,Acciones
 Add,Agregar
 "Email & Automation Marketing","Email Marketing & Automation"
 "Transactional Email","Email Transaccional"
-"Customers mapping","Mapeo de clientes"
-"Buyers mapping","Mapeo de compradores"
-"Subscribers mapping","Mapeo de suscriptores"
+"Customers Mapping","Mapeo de Clientes"
+"Buyers Mapping","Mapeo de Compradores"
+"Subscribers Mapping","Mapeo de Suscriptores"
 "Error a Magento field is more than once: ","Error un campo de Magento se encuentra repetido: "
 "Error a Doppler field is more than once: ","Error un campo de Doppler se encuentra repetido: "
 "Synchronize your Buyers with Doppler","Sincroniza tus Compradores con Doppler"

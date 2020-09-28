@@ -19,9 +19,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * DataProvider constructor.
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param \Combinatoria\Doppler\Model\ResourceModel\MapSubscribers\Collection $collection
      * @param \Combinatoria\Doppler\Model\ResourceModel\MapSubscribers\CollectionFactory $collectionFactory
      * @param array $meta
