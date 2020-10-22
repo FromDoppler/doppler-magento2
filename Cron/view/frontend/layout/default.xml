@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Combinatoria\Doppler\Block\Script" template="Combinatoria_Doppler::track.phtml"/>
+        </referenceContainer>
+        <block class="Combinatoria\Doppler\Block\Script" name="require.js" template="Combinatoria_Doppler::require_js.phtml"/>
+    </body>
+</page>

@@ -12,7 +12,7 @@
                 <label>Connect your Magento store with Doppler</label>
                 <field id="author" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label><![CDATA[When you synchronize, you can send automatically your Client's information to your Doppler account. You will be able to create Lists, import your products into customizable Email Templates and design Abandoned Cart and Visited Product Automations. Any doubts? Just press <a href='https://help.fromdoppler.com/en/how-to-integrate-your-magento-account-with-doppler/'>HELP</a>.]]></label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\Paragraph</frontend_model>
                 </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
@@ -42,23 +42,8 @@
                 <label>Synchronization</label>
                 <field id="synchtext" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>To connect your Magento store with Doppler, you must select the information you want to link between both platforms.</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\Paragraph</frontend_model>
                 </field>
-<!--                <field id="customers_list"  translate="label" type="select" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">-->
-<!--                    <label>Doppler list for buyers</label>-->
-<!--                    <source_model>Combinatoria\Doppler\Model\Source\Lists</source_model>-->
-<!--                    <backend_model>Combinatoria\Doppler\Model\Config\Backend\CustomerList</backend_model>-->
-<!--                </field>-->
-<!--                <field id="subscribers_list"  translate="label" type="select" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">-->
-<!--                    <label>Doppler list for subscribers</label>-->
-<!--                    <source_model>Combinatoria\Doppler\Model\Source\Lists</source_model>-->
-<!--                </field>-->
-<!--                <field id="synch_subscribers" translate="label comment button_label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">-->
-<!--                    <label>Synchronize subscribers</label>-->
-<!--                    <button_label>Synch</button_label>-->
-<!--                    <button_url>doppler/synch/subscribers</button_url>-->
-<!--                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\System\Config\SynchSubscribersButton</frontend_model>-->
-<!--                </field>-->
                 <field id="enabled_cron" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled Synchronization Cron</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -78,7 +63,7 @@
                 <label>Scripts</label>
                 <field id="scriptstext" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Here you can add the scripts, either to embed a Pop up that you have created in Doppler on your Website or to track the behavior of Users on your Website. The scripts you enter will work whether you have an active integration.</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Heading</frontend_model>
+                    <frontend_model>Combinatoria\Doppler\Block\Adminhtml\Paragraph</frontend_model>
                 </field>
                 <field id="popup_head" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Popup Head</label>

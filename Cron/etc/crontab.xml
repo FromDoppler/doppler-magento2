@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Doppler extension
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @package    Combinatoria_Doppler
+ * @author     Combinatoria
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="doppler_synch" instance="Combinatoria\Doppler\Cron\Synch" method="execute">
+            <config_path>crontab/default/jobs/doppler_synch/schedule/cron_expr</config_path>
+        </job>
+    </group>
+</config>

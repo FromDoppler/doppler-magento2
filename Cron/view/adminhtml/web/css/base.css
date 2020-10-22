@@ -1,0 +1,30 @@
+.admin__menu #menu-combinatoria-doppler-menu > a:before  {
+    /*opacity: 0.65;*/
+    content: '' !important;
+    font-size: 2.4rem;
+    display: block;
+    position: relative;
+    top: -0.3rem;
+    width: 28px;
+    height: 28px;
+    background: url(../images/menu-icon-doppler-pasive.png);
+    background-size: 28px 28px;
+    margin: 0 auto;
+}
+
+.admin__menu #menu-combinatoria-doppler-menu:hover > a:before {
+    content: '' !important;
+    font-size: 2.4rem;
+    display: block;
+    position: relative;
+    top: -0.3rem;
+    width: 28px;
+    height: 28px;
+    background: url(../images/menu-icon-doppler-active.png);
+    background-size: 28px 28px;
+    margin: 0 auto;
+}
+
+.doppler-dynamic-rows .admin__field-control{
+    width: calc( (100%) * .7 - 30px ) !important;
+}
