@@ -34,6 +34,12 @@
         </argument>
     </dataSource>
     <fieldset name="combinatoria_doppler_mapsubscribers_set">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true"></item>
+                <item name="sortOrder" xsi:type="number">10</item>
+            </item>
+        </argument>
         <field name="list_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Combinatoria\Doppler\Model\Source\Lists</item>
@@ -48,12 +54,6 @@
         <htmlContent name="html_content">
             <block name="block_name_here" class="Magento\Backend\Block\Template" template="Combinatoria_Doppler::map-subtitle.phtml"/>
         </htmlContent>
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true"></item>
-                <item name="sortOrder" xsi:type="number">10</item>
-            </item>
-        </argument>
         <container name="combinatoria_doppler_mapsubscribers_container">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

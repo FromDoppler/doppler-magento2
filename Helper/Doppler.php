@@ -10,6 +10,7 @@
  * @category    Combinatoria
  * @package     Combinatoria_Doppler
  */
+
 namespace Combinatoria\Doppler\Helper;
 
 use Exception;
@@ -35,7 +36,8 @@ use Combinatoria\Doppler\Model\ResourceModel\MapSubscribers\CollectionFactory as
  * Class Doppler
  * @package Combinatoria\Doppler\Helper
  */
-class Doppler extends AbstractHelper{
+class Doppler extends AbstractHelper {
+
     /**
      * @var ObjectManagerInterface $objectManager
      */
@@ -61,29 +63,31 @@ class Doppler extends AbstractHelper{
     protected $cacheTypeList;
 
     const CONFIG_DOPPLER_SYNC_CRON_FREQUENCY_PATH = 'doppler_config/synch/frequency';
-    const CONFIG_DOPPLER_SYNC_CRON_EXPR_PATH               = 'crontab/default/jobs/doppler_synch/schedule/cron_expr';
-    const CONFIG_DOPPLER_SYNC_CRON_MODEL_PATH              = 'crontab/default/jobs/doppler_synch/run/model';
+    const CONFIG_DOPPLER_SYNC_CRON_EXPR_PATH = 'crontab/default/jobs/doppler_synch/schedule/cron_expr';
+    const CONFIG_DOPPLER_SYNC_CRON_MODEL_PATH = 'crontab/default/jobs/doppler_synch/run/model';
+
     /**
      * @param Context $context
      * @param ResourceConnection $resource
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        Context $context,
-        ResourceConnection $resource,
-        ScopeConfigInterface $scopeConfig,
-        ConfigInterface $configInterface,
-        ObjectManagerInterface $objectManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        Map $map,
-        MapFactory $mapFactory,
-        IntegrationFactory $integrationFactory,
+        Context                                        $context,
+        ResourceConnection                             $resource,
+        ScopeConfigInterface                           $scopeConfig,
+        ConfigInterface                                $configInterface,
+        ObjectManagerInterface                         $objectManager,
+        \Magento\Store\Model\StoreManagerInterface     $storeManager,
+        Map                                            $map,
+        MapFactory                                     $mapFactory,
+        IntegrationFactory                             $integrationFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        MapCustomers $mapCustomers,
-        MapCustomersFactory $mapCustomersFactory,
-        MapSubscribers $mapSubscribers,
-        MapSubscribersFactory $mapSubscribersFactory
-    ) {
+        MapCustomers                                   $mapCustomers,
+        MapCustomersFactory                            $mapCustomersFactory,
+        MapSubscribers                                 $mapSubscribers,
+        MapSubscribersFactory                          $mapSubscribersFactory
+    )
+    {
         parent::__construct($context);
 
         $this->_scopeConfig = $scopeConfig;
@@ -116,14 +120,16 @@ class Doppler extends AbstractHelper{
      * Saves config value
      *
      * @param string $path
-     * @param mixed  $value
+     * @param mixed $value
      * @return void
      */
     public function setConfigValue($path, $value)
     {
         $this->_configInterface->saveConfig($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, Store::DEFAULT_STORE_ID);
+
         return;
     }
+
     /**
      * API call to test if Doppler API is active
      */
@@ -135,7 +141,7 @@ class Doppler extends AbstractHelper{
         // API not available error code
         $statusCode = '4040';
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             // Get cURL resource
             $ch = curl_init();
@@ -158,13 +164,15 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if($resp) {
+            if ($resp)
+            {
                 $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             }
 
             // Close request to clear up some resources
             curl_close($ch);
-        } else {
+        } else
+        {
             throw new \Exception(
                 __('Error: Fill username and key.')
             );
@@ -185,12 +193,13 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '') {
+        if ($usernameValue != '' && $apiKeyValue != '')
+        {
             // Get cURL resource
             $ch = curl_init();
 
             // Set url
-            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue. '/fields');
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/fields');
 
             // Set method
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -207,11 +216,12 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if($resp)
+            if ($resp)
             {
                 $responseContent = json_decode($resp, true);
 
-                if(isset($responseContent['items'])){
+                if (isset($responseContent['items']))
+                {
                     $fieldsResponseArray = $responseContent['items'];
 
                     foreach ($fieldsResponseArray as $field)
@@ -246,12 +256,13 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '') {
+        if ($usernameValue != '' && $apiKeyValue != '')
+        {
             // Get cURL resource
             $ch = curl_init();
 
             // Set url
-            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue. '/lists?page=1&per_page=200');
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/lists?page=1&per_page=200');
 
             // Set method
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -268,14 +279,16 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if($resp)
+            if ($resp)
             {
                 $responseContent = json_decode($resp, true);
 
-                if(isset($responseContent['items'])){
+                if (isset($responseContent['items']))
+                {
                     $listsResponseArray = $responseContent['items'];
 
-                    if(is_array($listsResponseArray)){
+                    if (is_array($listsResponseArray))
+                    {
                         foreach ($listsResponseArray as $list)
                         {
                             $list['id_field_name'] = 'listId';
@@ -300,12 +313,14 @@ class Doppler extends AbstractHelper{
      */
     public function createDopplerLists($name)
     {
-        if($name == ''){
+        if ($name == '')
+        {
             $errorMsg = __("Ouch! You need to name the List to create it.");
             throw new \Exception($errorMsg);
         }
 
-        if(strlen($name) > 100){
+        if (strlen($name) > 100)
+        {
             $errorMsg = __("Oops! You’ve reached the maximum number of characters.");
             throw new \Exception($errorMsg);
         }
@@ -313,7 +328,7 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             // Get cURL resource
             $ch = curl_init();
@@ -351,17 +366,23 @@ class Doppler extends AbstractHelper{
                 if ($statusCode == '201')
                 {
                     $responseContent = json_decode($resp, true);
+
                     return $responseContent['createdResourceId'];
-                } else {
+                } else
+                {
                     $responseContent = json_decode($resp, true);
 
-                    if($responseContent['errorCode'] == 0){
+                    if ($responseContent['errorCode'] == 0)
+                    {
                         $errorMsg = __("Ouch! You've made several actions in a short period of time. Please wait a few minutes before making another one.");
-                    }elseif($responseContent['errorCode'] == 2){
+                    } elseif ($responseContent['errorCode'] == 2)
+                    {
                         $errorMsg = __("Ouch! You've already used this name for another List.");
-                    }elseif($responseContent['errorCode'] == 3){
+                    } elseif ($responseContent['errorCode'] == 3)
+                    {
                         $errorMsg = __("Ouch! You've reached the maximum number of Lists created.");
-                    }else{
+                    } else
+                    {
                         $errorMsg = __($responseContent['detail']);
                     }
 
@@ -387,7 +408,7 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             $dopplerMappedFields = $this->getDopplerMappedFields($type);
 
@@ -398,7 +419,8 @@ class Doppler extends AbstractHelper{
             $leadMappingArrayKeys = array_keys($dopplerMappedFields);
 
             $dopplerFieldsDataType = array();
-            for ($i = 0; $i < $mappedFieldsCount; $i++) {
+            for ($i = 0; $i < $mappedFieldsCount; $i++)
+            {
                 $fieldName = $leadMappingArrayKeys[$i];
                 $dopplerFieldsDataType[$fieldName] = $this->getDopplerFieldDataType($fieldName);
             }
@@ -439,20 +461,23 @@ class Doppler extends AbstractHelper{
                     $trimmedFieldValue = trim($field);
 
                     // Get data from customer attribute
-                    if(!isset($customer[$trimmedFieldValue])){
+                    if ( ! isset($customer[$trimmedFieldValue]))
+                    {
                         $customer[$trimmedFieldValue] = '';
                     }
-                    $customerData =  $customer[$trimmedFieldValue];
+                    $customerData = $customer[$trimmedFieldValue];
 
                     $this->_customerAttributes[$trimmedFieldValue] = $customerData;
 
                 }
 
-                if(!isset($customer['email']) && isset($customer['subscriber_email'])){
+                if ( ! isset($customer['email']) && isset($customer['subscriber_email']))
+                {
                     $customer['email'] = $customer['subscriber_email'];
                 }
 
-                if(in_array($customer['email'],$emails)){
+                if (in_array($customer['email'], $emails))
+                {
                     continue;
                 }
 
@@ -461,10 +486,11 @@ class Doppler extends AbstractHelper{
 
                 $body .= '{ "email": "' . $customer['email'] . '", ';
 
-                
+
                 $body .= ' "fields": [ ';
-                
-                if($mappedFieldsCount > 0){
+
+                if ($mappedFieldsCount > 0)
+                {
                     $customerAttributesArrayKeys = array_keys($this->_customerAttributes);
 
                     for ($i = 0; $i < $mappedFieldsCount; $i++)
@@ -472,18 +498,21 @@ class Doppler extends AbstractHelper{
                         $fieldName = $leadMappingArrayKeys[$i];
                         $customerAttributeValue = $this->_customerAttributes[$customerAttributesArrayKeys[$i]];
 
-                        if($customerAttributeValue == '' || $customerAttributeValue == null){
+                        if ($customerAttributeValue == '' || $customerAttributeValue == null)
+                        {
                             continue;
                         }
                         // Validate each mapped field before exporting
                         $dopplerFieldDataType = $dopplerFieldsDataType[$fieldName];
 
-                        switch ($dopplerFieldDataType) {
+                        switch ($dopplerFieldDataType)
+                        {
                             case 'date':
                                 // Format: yyyy-MM-dd
                                 if ($dopplerFieldDataType == 'date' ||
                                     $dopplerFieldDataType == 'datetime'
-                                ) {
+                                )
+                                {
                                     $customerAttributeValue = $this->getFormattedDate($customerAttributeValue);
                                 }
                                 break;
@@ -517,7 +546,8 @@ class Doppler extends AbstractHelper{
                         if (($i + 1) < $mappedFieldsCount)
                         {
                             $body .= '},';
-                        } else {
+                        } else
+                        {
                             $body .= '}';
                         }
                     }
@@ -526,7 +556,8 @@ class Doppler extends AbstractHelper{
                 if ($customerCounter == $customerCount)
                 {
                     $body .= ']}';
-                } else {
+                } else
+                {
                     $body .= ']},';
                 }
 
@@ -534,7 +565,8 @@ class Doppler extends AbstractHelper{
 
             }
 
-            if(!$items){
+            if ( ! $items)
+            {
                 return true;
             }
             $body .= '],}}';
@@ -574,33 +606,40 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    if(isset($responseContent['errors'])){
+                    if (isset($responseContent['errors']))
+                    {
                         $errorResponseArray = $responseContent['errors'];
-                        foreach ($errorResponseArray as $error) {
+                        foreach ($errorResponseArray as $error)
+                        {
                             $errors[] = $error['detail'];
                         }
-                        throw new \Exception(implode("\n",$errors));
-                    }else{
+                        throw new \Exception(implode("\n", $errors));
+                    } else
+                    {
                         throw new \Exception($responseContent['detail']);
                     }
 
-                }else{
+                } else
+                {
                     return true;
                 }
             }
             // Close request to clear up some resources
             curl_close($ch);
-        }else{
+        } else
+        {
             throw new \Exception(
                 __('Error: Fill username and key.')
             );
         }
     }
 
-    public function getDopplerMappedFields($type) {
+    public function getDopplerMappedFields($type)
+    {
         $this->_leadMapping = [];
 
-        switch ($type){
+        switch ($type)
+        {
             case "buyer":
                 $leadmapCollection = $this->_mapFactory->create();
                 break;
@@ -641,12 +680,13 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '') {
+        if ($usernameValue != '' && $apiKeyValue != '')
+        {
             // Get cURL resource
             $ch = curl_init();
 
             // Set url
-            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue. '/fields');
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/fields');
 
             // Set method
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -663,11 +703,12 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if($resp)
+            if ($resp)
             {
                 $responseContent = json_decode($resp, true);
 
-                if(isset($responseContent['items'])){
+                if (isset($responseContent['items']))
+                {
                     $fieldsResponseArray = $responseContent['items'];
 
                     foreach ($fieldsResponseArray as $field)
@@ -702,12 +743,13 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '') {
+        if ($usernameValue != '' && $apiKeyValue != '')
+        {
             // Get cURL resource
             $ch = curl_init();
 
             // Set url
-            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue. '/lists/' . $listId . '/subscribers');
+            curl_setopt($ch, CURLOPT_URL, 'https://restapi.fromdoppler.com/accounts/' . $usernameValue . '/lists/' . $listId . '/subscribers');
 
             // Set method
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
@@ -724,10 +766,11 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if($resp)
+            if ($resp)
             {
                 $responseContent = json_decode($resp, true);
-                if(isset($responseContent['items'])){
+                if (isset($responseContent['items']))
+                {
                     $fieldsResponseArray = $responseContent['items'];
                 }
             }
@@ -743,9 +786,9 @@ class Doppler extends AbstractHelper{
      * @param $mensaje String
      * @param $archivo String
      */
-    public static function log($mensaje,$archivo)
+    public static function log($mensaje, $archivo)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/'.$archivo);
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/' . $archivo);
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($mensaje);
@@ -771,23 +814,28 @@ class Doppler extends AbstractHelper{
         return $formattedDate;
     }
 
-    public function isSynchronized($email,$list){
-        foreach ($list as $item){
-            if($email == $item['email']){
+    public function isSynchronized($email, $list)
+    {
+        foreach ($list as $item)
+        {
+            if ($email == $item['email'])
+            {
                 return true;
             }
         }
+
         return false;
     }
 
-    public function putIntegration(){
+    public function putIntegration()
+    {
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
         $accessToken = $this->getConfigValue('doppler_config/integration/token');
         $accountName = $this->storeManager->getStore()->getBaseUrl();
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             $body = '{ "accessToken":"' . $accessToken . '", "accountName":"' . $accountName . '" }';
             // Get cURL resource
@@ -824,14 +872,17 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    if($responseContent['errorCode'] == 42){
+                    if ($responseContent['errorCode'] == 42)
+                    {
                         $errorMsg = __("Ouch! Your Magento store is already connected through the Control Panel of your Doppler Account.");
-                    }else{
+                    } else
+                    {
                         $errorMsg = __($responseContent['detail']);
                     }
 
                     throw new \Exception($errorMsg);
-                }else{
+                } else
+                {
                     return true;
                 }
             }
@@ -840,11 +891,12 @@ class Doppler extends AbstractHelper{
         }
     }
 
-    public function deleteIntegration(){
+    public function deleteIntegration()
+    {
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             // Get cURL resource
             $ch = curl_init();
@@ -876,14 +928,17 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    if($responseContent['errorCode'] == 40){
+                    if ($responseContent['errorCode'] == 40)
+                    {
                         $errorMsg = __("Ouch! You can't disconnect the integration 'cause you've Campaigns associated to it.");
-                    }else{
+                    } else
+                    {
                         $errorMsg = __($responseContent['detail']);
                     }
 
                     throw new \Exception($errorMsg);
-                }else{
+                } else
+                {
                     return true;
                 }
             }
@@ -892,11 +947,12 @@ class Doppler extends AbstractHelper{
         }
     }
 
-    public function deleteOldIntegration(){
+    public function deleteOldIntegration()
+    {
         $usernameValue = $this->getConfigValue('doppler_config/config/username_old');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key_old');
 
-        if($usernameValue != '' && $apiKeyValue != '')
+        if ($usernameValue != '' && $apiKeyValue != '')
         {
             // Get cURL resource
             $ch = curl_init();
@@ -928,14 +984,17 @@ class Doppler extends AbstractHelper{
                 // If the response contains the 'error' item, then it's a validation error
                 if (isset($responseContent['status']) && $responseContent['status'] != 200)
                 {
-                    if($responseContent['errorCode'] == 40){
+                    if ($responseContent['errorCode'] == 40)
+                    {
                         $errorMsg = __("Ouch! You can't disconnect the integration 'cause you've Campaigns associated to it.");
-                    }else{
+                    } else
+                    {
                         $errorMsg = __($responseContent['detail']);
                     }
 
                     throw new \Exception($errorMsg);
-                }else{
+                } else
+                {
                     return true;
                 }
             }
@@ -949,7 +1008,8 @@ class Doppler extends AbstractHelper{
         $usernameValue = $this->getConfigValue('doppler_config/config/username');
         $apiKeyValue = $this->getConfigValue('doppler_config/config/key');
 
-        if ($usernameValue != '' && $apiKeyValue != '') {
+        if ($usernameValue != '' && $apiKeyValue != '')
+        {
             // Get cURL resource
             $ch = curl_init();
 
@@ -973,16 +1033,21 @@ class Doppler extends AbstractHelper{
             // Send the request & save response to $resp
             $resp = curl_exec($ch);
 
-            if ($resp) {
+            if ($resp)
+            {
                 $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-                if ($statusCode == '200') {
+                if ($statusCode == '200')
+                {
                     return true;
-                } else {
+                } else
+                {
                     $responseContent = json_decode($resp, true);
                     $errorMsg = '';
-                    if($responseContent['errorCode'] == 8){
-                        switch ($responseContent['blockingReasonCode']){
+                    if ($responseContent['errorCode'] == 8)
+                    {
+                        switch ($responseContent['blockingReasonCode'])
+                        {
                             case "CannotDeleteSubscribersListWithAnScheduledCampaign":
                                 $errorMsg = __("Ouch! The List is associated to a Campaign in sending process.");
                                 break;
@@ -1013,9 +1078,11 @@ class Doppler extends AbstractHelper{
                             default:
                                 $errorMsg = __($responseContent['detail']);
                         }
-                    }else if($responseContent['errorCode'] == 1){
+                    } else if ($responseContent['errorCode'] == 1)
+                    {
                         $errorMsg = __("Ouch! The List is in the process of being deleted.");
-                    }else{
+                    } else
+                    {
                         $errorMsg = __($responseContent['detail']);
                     }
 
@@ -1025,25 +1092,33 @@ class Doppler extends AbstractHelper{
         }
     }
 
-    public function cleanCache(){
+    public function cleanCache()
+    {
         $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
         $this->cacheTypeList->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 
-    public function isFieldDuplicated($data){
+    public function isFieldDuplicated($data)
+    {
         $doppler = [];
         $magento = [];
 
-        foreach($data as $k => $item){
-            if(in_array($item['magento_field_name'],$magento)){
-                return __("Error a Magento field is more than once: ") . $item['magento_field_name'];
-            }
-            if(in_array($item['doppler_field_name'],$doppler)){
-                return __("Error a Doppler field is more than once: ") . $item['doppler_field_name'];
-            }
+        if ( ! empty($data))
+        {
+            foreach ($data as $k => $item)
+            {
+                if (in_array($item['magento_field_name'], $magento))
+                {
+                    return __("Error a Magento field is more than once: ") . $item['magento_field_name'];
+                }
+                if (in_array($item['doppler_field_name'], $doppler))
+                {
+                    return __("Error a Doppler field is more than once: ") . $item['doppler_field_name'];
+                }
 
-            $magento[] = $item['magento_field_name'];
-            $doppler[] = $item['doppler_field_name'];
+                $magento[] = $item['magento_field_name'];
+                $doppler[] = $item['doppler_field_name'];
+            }
         }
 
         return false;

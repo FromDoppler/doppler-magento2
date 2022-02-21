@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="combinatoria_doppler_leadmap" resource="default" engine="innodb" comment="combinatoria_doppler_leadmap">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="varchar" name="doppler_field_name" nullable="false" length="255" comment="Doppler field"/>
+    <column xsi:type="varchar" name="magento_field_name" nullable="false" length="255" comment="Magento field"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+  <table name="combinatoria_doppler_lists" resource="default" engine="innodb" comment="combinatoria_doppler_lists">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="int" name="list_id" padding="11" unsigned="false" nullable="false" identity="false" comment="List ID"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="List name"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" comment="Status"/>
+    <column xsi:type="int" name="subscribers_count" padding="11" unsigned="false" nullable="false" identity="false" comment="Subscribers count"/>
+    <column xsi:type="timestamp" name="last_usage" on_update="false" nullable="true" comment="Last usage"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+  <table name="combinatoria_doppler_importtasks" resource="default" engine="innodb" comment="combinatoria_doppler_importtasks">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="varchar" name="import_id" nullable="false" length="255" comment="Import ID"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" comment="Status"/>
+    <column xsi:type="text" name="customers" nullable="false" comment="Customers"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+  <table name="combinatoria_doppler_mapcustomers" resource="default" engine="innodb" comment="combinatoria_doppler_mapcustomers">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="varchar" name="doppler_field_name" nullable="false" length="255" comment="Doppler field"/>
+    <column xsi:type="varchar" name="magento_field_name" nullable="false" length="255" comment="Magento field"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+  <table name="combinatoria_doppler_mapsubscribers" resource="default" engine="innodb" comment="combinatoria_doppler_mapsubscribers">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="varchar" name="doppler_field_name" nullable="false" length="255" comment="Doppler field"/>
+    <column xsi:type="varchar" name="magento_field_name" nullable="false" length="255" comment="Magento field"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+  </table>
+</schema>
