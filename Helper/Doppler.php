@@ -61,6 +61,8 @@ class Doppler extends AbstractHelper {
     private $storeManager;
 
     protected $cacheTypeList;
+    
+    protected $connection;
 
     const CONFIG_DOPPLER_SYNC_CRON_FREQUENCY_PATH = 'doppler_config/synch/frequency';
     const CONFIG_DOPPLER_SYNC_CRON_EXPR_PATH = 'crontab/default/jobs/doppler_synch/schedule/cron_expr';
