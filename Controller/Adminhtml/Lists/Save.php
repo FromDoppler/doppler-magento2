@@ -4,7 +4,7 @@
  *
  * DISCLAIMER
  *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * Do not edit or add to this file if you wish to upgrade this extension to a newer
  * version in the future.
  *
  * @package    Combinatoria_Doppler
@@ -28,6 +28,21 @@ use Magento\Framework\Controller\ResultFactory;
 class Save extends Action
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Doppler
+     */
+    protected $dopplerHelper;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -42,9 +57,9 @@ class Save extends Action
         Doppler  $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->jsonHelper        = $jsonHelper;
+        $this->dopplerHelper     = $dopplerHelper;
 
         parent::__construct($context);
     }
@@ -54,7 +69,7 @@ class Save extends Action
         try {
             $name = $this->getRequest()->getParam('name');
 
-            if($this->_dopplerHelper->createDopplerLists($name)){
+            if ($this->dopplerHelper->createDopplerLists($name)) {
                 $this->messageManager->addSuccessMessage(__('The List has been created correctly.'));
             }
         } catch (\Exception $e) {

@@ -19,6 +19,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\View\Result\PageFactory;
 use Combinatoria\Doppler\Helper\Doppler;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Class Create
@@ -27,6 +28,21 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Create extends Action
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Doppler
+     */
+    protected $dopplerHelper;
+
     /**
      * Constructor
      *
@@ -42,16 +58,17 @@ class Create extends Action
         Doppler  $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->jsonHelper        = $jsonHelper;
+        $this->dopplerHelper     = $dopplerHelper;
 
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        /** @var Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         return $resultPage;
     }
 

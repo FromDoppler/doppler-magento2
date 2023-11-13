@@ -10,7 +10,7 @@ class Lists implements \Magento\Framework\Option\ArrayInterface
      */
     private $_dopplerHelper;
 
-    protected $_attributeFactory;
+    protected $request;
 
     public function __construct(
         Doppler  $dopplerHelper,

@@ -19,14 +19,30 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\View\Result\PageFactory;
 use Combinatoria\Doppler\Helper\Doppler;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Class Connection
- * @package Combinatoria\Doppler\Controller\Adminhtml\MapClients
+ * @package Combinatoria\Doppler\Controller\Adminhtml\MapCustomers
  */
 
 class Index extends Action
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Doppler
+     */
+    protected $dopplerHelper;
+
     /**
      * Constructor
      *
@@ -42,16 +58,17 @@ class Index extends Action
         Doppler  $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->jsonHelper        = $jsonHelper;
+        $this->dopplerHelper     = $dopplerHelper;
 
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        /** @var Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         return $resultPage;
     }
 

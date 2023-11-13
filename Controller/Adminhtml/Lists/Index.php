@@ -20,33 +20,23 @@ use Magento\Framework\View\Result\PageFactory;
 use Combinatoria\Doppler\Helper\Doppler;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class Index
- * @package Combinatoria\Doppler\Controller\Adminhtml\Lists
- */
-
 class Index extends Action
 {
-    /**
-     * Constructor
-     *
-     * @param Context $context
-     * @param PageFactory $resultPageFactory
-     * @param JsonHelper $jsonHelper
-     * @param Doppler $dopplerHelper
-     */
+    private $resultPageFactory;
+    private $jsonHelper;
+    private $dopplerHelper;
+
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         JsonHelper $jsonHelper,
-        Doppler  $dopplerHelper
+        Doppler $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
-
         parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->dopplerHelper = $dopplerHelper;
     }
 
     public function execute()

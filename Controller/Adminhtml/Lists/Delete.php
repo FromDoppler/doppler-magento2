@@ -25,15 +25,34 @@ use Magento\Ui\Component\MassAction\Filter;
  * Class Delete
  * @package Combinatoria\Doppler\Controller\Adminhtml\Lists
  */
-
 class Delete extends Action
 {
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Doppler
+     */
+    protected $dopplerHelper;
+
+    /**
+     * @var Filter
+     */
     protected $filter;
+
     /**
      * Constructor
      *
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @param Filter $filter
      * @param JsonHelper $jsonHelper
      * @param Doppler $dopplerHelper
      */
@@ -45,10 +64,10 @@ class Delete extends Action
         Doppler  $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
+        $this->resultPageFactory = $resultPageFactory;
         $this->filter = $filter;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
+        $this->jsonHelper = $jsonHelper;
+        $this->dopplerHelper = $dopplerHelper;
 
         parent::__construct($context);
     }
@@ -56,21 +75,20 @@ class Delete extends Action
     public function execute()
     {
         try {
-            $deleteIds = $this->getRequest()->getParams('selected');
+            $selected = $this->getRequest()->getParam('selected');
 
-            $customers_list = $this->_dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
-            $subscribers_list = $this->_dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
+            $customersList = $this->dopplerHelper->getConfigValue('doppler_config/synch/customers_list');
+            $subscribersList = $this->dopplerHelper->getConfigValue('doppler_config/synch/subscribers_list');
 
-            /** @var \Magento\Sales\Model\Order $order */
-            foreach ($deleteIds['selected'] as $list) {
-                if($list != $customers_list && $list != $subscribers_list){
-                    $this->_dopplerHelper->deleteList($list);
-                }else{
+            foreach ($selected as $list) {
+                if ($list != $customersList && $list != $subscribersList) {
+                    $this->dopplerHelper->deleteList($list);
+                } else {
                     $this->messageManager->addErrorMessage(__("You cannot delete lists currently used for synchronization"));
                 }
             }
 
-            $this->messageManager->addSuccessMessage(__('The lists has been successfully deleted'));
+            $this->messageManager->addSuccessMessage(__('The lists have been successfully deleted'));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__($e->getMessage()));
         }

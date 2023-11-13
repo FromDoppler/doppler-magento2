@@ -28,6 +28,21 @@ use Magento\Framework\Controller\ResultFactory;
 class Index extends Action
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
+     * @var Doppler
+     */
+    protected $dopplerHelper;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -42,16 +57,16 @@ class Index extends Action
         Doppler  $dopplerHelper
     )
     {
-        $this->_resultPageFactory = $resultPageFactory;
-        $this->_jsonHelper        = $jsonHelper;
-        $this->_dopplerHelper = $dopplerHelper;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->jsonHelper        = $jsonHelper;
+        $this->dopplerHelper     = $dopplerHelper;
 
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage = $this->resultPageFactory->create();
         return $resultPage;
     }
 
